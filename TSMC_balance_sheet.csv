@@ -1,0 +1,86 @@
+,Code,Title,2019,2018
+0,,資產Assets,,
+1,,流動資產　Current assets,,
+2,1100,現金及約當現金 Cash and cash equivalents,455399336,577814601
+3,1110,透過損益按公允價值衡量之金融資產－流動 Current financial assets at fair value through profit or loss,326839,3504590
+4,1120,透過其他綜合損益按公允價值衡量之金融資產－流動 Current financial assets at fair value through other comprehensive income,127396577,99561740
+5,1136,按攤銷後成本衡量之金融資產－流動 Current financial assets at amortised cost,299884,14277615
+6,1139,避險之金融資產－流動 Current financial assets for hedging,25884,23497
+7,1170,"應收帳款淨額 Accounts receivable, net",138908589,128613391
+8,1180,"應收帳款－關係人淨額 Accounts receivable due from related parties, net",862070,584412
+9,1210,其他應收款－關係人 Other receivables due from related parties,51653,65028
+10,130X,存貨 Current inventories,82981196,103230976
+11,1470,其他流動資產 Other current assets,16361886,24003871
+12,1476,其他金融資產－流動 Other current financial assets,11041091,18597448
+13,1479,"其他流動資產－其他 Other current assets, others",5320795,5406423
+14,11XX,流動資產合計 Total current assets,822613914,951679721
+15,,非流動資產　Non-current assets,,
+16,1517,透過其他綜合損益按公允價值衡量之金融資產－非流動 Non-current financial assets at fair value through other comprehensive income,4124337,3910681
+17,1535,按攤銷後成本衡量之金融資產－非流動 Non-current financial assets at amortised cost,7348914,7528277
+18,1550,採用權益法之投資 Investments accounted for using equity method,18698788,17865838
+19,1600,"不動產、廠房及設備 Property, plant and equipment",1352377405,1072050279
+20,1755,使用權資產 Right-of-use assets,17232402,0
+21,1780,無形資產 Intangible assets,20653028,17002137
+22,1840,遞延所得稅資產 Deferred tax assets,17928358,16806387
+23,1900,其他非流動資產 Other non-current assets,3827886,3284718
+24,1920,存出保證金 Guarantee deposits paid,2084968,1700071
+25,1990,"其他非流動資產－其他 Other non-current assets, others",1742918,1584647
+26,15XX,非流動資產合計 Total non-current assets,1442191118,1138448317
+27,1XXX,資產總計　Total assets,2264805032,2090128038
+28,,負債及權益Liabilities and equity,,
+29,,負債　Liabilities,,
+30,,流動負債 Current liabilities,,
+31,2100,短期借款 Current borrowings,118522290,88754640
+32,2120,透過損益按公允價值衡量之金融負債－流動 Current financial liabilities at fair value through profit or loss,982349,40825
+33,2126,避險之金融負債－流動 Current financial liabilities for hedging,1798,155832
+34,2170,應付帳款 Accounts payable,38771066,32980933
+35,2180,應付帳款－關係人 Accounts payable to related parties,1434900,1376499
+36,2200,其他應付款 Other payables,310383861,81586185
+37,2201,應付薪資 Wages and salaries payable,16272353,14471372
+38,2206,應付員工紅利 Employee bonus payable,23288499,23631882
+39,2207,應付董監事酬勞 Compensation due to directors and supervisors,360404,349272
+40,2213,應付設備款 Payable on machinery and equipment,140810703,43133659
+41,2216,"應付股利 Dividends payable, non-cash assets distributions",129651902,0
+42,2230,本期所得稅負債 Current tax liabilities,32466156,38987053
+43,2300,其他流動負債 Other current liabilities,88173281,96660619
+44,2320,"一年或一營業週期內到期長期負債 Long-term liabilities, current portion",31800000,34900000
+45,2399,"其他流動負債－其他 Other current liabilities, others",56373281,61760619
+46,21XX,流動負債合計 Total current liabilities,590735701,340542586
+47,,非流動負債 Non-current liabilities,,
+48,2530,應付公司債 Bonds payable,25100000,56900000
+49,2570,遞延所得稅負債 Deferred tax liabilities,344393,233284
+50,2580,租賃負債－非流動 Non-current lease liabilities,15041833,0
+51,2600,其他非流動負債 Other non-current liabilities,11487679,14955772
+52,2640,"淨確定福利負債-非流動 Net defined benefit liability, non-current",9182496,9651405
+53,2645,存入保證金 Guarantee deposits received,176904,3353378
+54,2670,"其他非流動負債－其他 Other non-current liabilities, others",2128279,1950989
+55,25XX,非流動負債合計 Total non-current liabilities,51973905,72089056
+56,2XXX,負債總計 Total liabilities,642709606,412631642
+57,,權益　Equity,,
+58,,歸屬於母公司業主之權益 Equity attributable to owners of parent,,
+59,,股本 Share capital,,
+60,3110,普通股股本 Ordinary share,259303805,259303805
+61,3100,股本合計 Total capital stock,259303805,259303805
+62,,資本公積 Capital surplus,,
+63,3210,"資本公積－發行溢價 Capital surplus, additional paid-in capital",33077786,33077786
+64,3211,"資本公積－普通股股票溢價 Capital surplus, additional paid-in capital arising from ordinary share",24184939,24184939
+65,3213,"資本公積－轉換公司債轉換溢價 Capital surplus, additional paid-in capital arising from bond conversion",8892847,8892847
+66,3235,"資本公積－認列對子公司所有權權益變動數 Capital Surplus, changes in ownership interests in subsidiaries",121843,121473
+67,3250,"資本公積－受贈資產 Capital surplus, donated assets received",33336,29343
+68,3252,"資本公積－其他受贈資產 Capital surplus, other donated assets received",33336,29343
+69,3260,"資本公積－採用權益法認列關聯企業及合資股權淨值之變動數 Capital surplus, changes in equity of associates and joint ventures accounted for using equity method",302234,282820
+70,3270,"資本公積－合併溢額 Capital surplus, net assets from merger",22804510,22804510
+71,3200,資本公積合計 Total capital surplus,56339709,56315932
+72,,保留盈餘 Retained earnings,,
+73,3310,法定盈餘公積 Legal reserve,311146899,276033811
+74,3320,特別盈餘公積 Special reserve,10675106,26907527
+75,3350,未分配盈餘（或待彌補虧損） Unappropriated retained earnings (accumulated deficit),1011512974,1073706503
+76,3300,保留盈餘合計 Total retained earnings,1333334979,1376647841
+77,,其他權益 Other equity interest,,
+78,3400,其他權益合計 Total other equity interest,"(27,568,369)","(15,449,913)"
+79,31XX,歸屬於母公司業主之權益合計 Total equity attributable to owners of parent,1621410124,1676817665
+80,36XX,非控制權益 Non-controlling interests,685302,678731
+81,3XXX,權益總計 Total equity,1622095426,1677496396
+82,3X2X,負債及權益總計　Total liabilities and equity,2264805032,2090128038
+83,3998,預收股款（權益項下）之約當發行股數　Equivalent issue shares of advance receipts for ordinary share,0,0
+84,3999,母公司暨子公司所持有之母公司庫藏股股數（單位：股）　Number of shares in entity held by entity and by its subsidiaries,0,0
