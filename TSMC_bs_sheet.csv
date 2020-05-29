@@ -1,86 +1,86 @@
 ,Code,Title,2019,2018
-0,,¸ê²£Assets,,
-1,,¬y°Ê¸ê²£¡@Current assets,,
-2,1100,²{ª÷¤Î¬ù·í²{ª÷ Cash and cash equivalents,455399336,577814601
-3,1110,³z¹L·l¯q«ö¤½¤¹»ù­È¿Å¶q¤§ª÷¿Ä¸ê²£¡Ğ¬y°Ê Current financial assets at fair value through profit or loss,326839,3504590
-4,1120,³z¹L¨ä¥Lºî¦X·l¯q«ö¤½¤¹»ù­È¿Å¶q¤§ª÷¿Ä¸ê²£¡Ğ¬y°Ê Current financial assets at fair value through other comprehensive income,127396577,99561740
-5,1136,«öÅu¾P«á¦¨¥»¿Å¶q¤§ª÷¿Ä¸ê²£¡Ğ¬y°Ê Current financial assets at amortised cost,299884,14277615
-6,1139,Á×ÀI¤§ª÷¿Ä¸ê²£¡Ğ¬y°Ê Current financial assets for hedging,25884,23497
-7,1170,"À³¦¬±b´Ú²bÃB Accounts receivable, net",138908589,128613391
-8,1180,"À³¦¬±b´Ú¡ĞÃö«Y¤H²bÃB Accounts receivable due from related parties, net",862070,584412
-9,1210,¨ä¥LÀ³¦¬´Ú¡ĞÃö«Y¤H Other receivables due from related parties,51653,65028
-10,130X,¦s³f Current inventories,82981196,103230976
-11,1470,¨ä¥L¬y°Ê¸ê²£ Other current assets,16361886,24003871
-12,1476,¨ä¥Lª÷¿Ä¸ê²£¡Ğ¬y°Ê Other current financial assets,11041091,18597448
-13,1479,"¨ä¥L¬y°Ê¸ê²£¡Ğ¨ä¥L Other current assets, others",5320795,5406423
-14,11XX,¬y°Ê¸ê²£¦X­p Total current assets,822613914,951679721
-15,,«D¬y°Ê¸ê²£¡@Non-current assets,,
-16,1517,³z¹L¨ä¥Lºî¦X·l¯q«ö¤½¤¹»ù­È¿Å¶q¤§ª÷¿Ä¸ê²£¡Ğ«D¬y°Ê Non-current financial assets at fair value through other comprehensive income,4124337,3910681
-17,1535,«öÅu¾P«á¦¨¥»¿Å¶q¤§ª÷¿Ä¸ê²£¡Ğ«D¬y°Ê Non-current financial assets at amortised cost,7348914,7528277
-18,1550,±Ä¥ÎÅv¯qªk¤§§ë¸ê Investments accounted for using equity method,18698788,17865838
-19,1600,"¤£°Ê²£¡B¼t©Ğ¤Î³]³Æ Property, plant and equipment",1352377405,1072050279
-20,1755,¨Ï¥ÎÅv¸ê²£ Right-of-use assets,17232402,0
-21,1780,µL§Î¸ê²£ Intangible assets,20653028,17002137
-22,1840,»¼©µ©Ò±oµ|¸ê²£ Deferred tax assets,17928358,16806387
-23,1900,¨ä¥L«D¬y°Ê¸ê²£ Other non-current assets,3827886,3284718
-24,1920,¦s¥X«OÃÒª÷ Guarantee deposits paid,2084968,1700071
-25,1990,"¨ä¥L«D¬y°Ê¸ê²£¡Ğ¨ä¥L Other non-current assets, others",1742918,1584647
-26,15XX,«D¬y°Ê¸ê²£¦X­p Total non-current assets,1442191118,1138448317
-27,1XXX,¸ê²£Á`­p¡@Total assets,2264805032,2090128038
-28,,­t¶Å¤ÎÅv¯qLiabilities and equity,,
-29,,­t¶Å¡@Liabilities,,
-30,,¬y°Ê­t¶Å Current liabilities,,
-31,2100,µu´Á­É´Ú Current borrowings,118522290,88754640
-32,2120,³z¹L·l¯q«ö¤½¤¹»ù­È¿Å¶q¤§ª÷¿Ä­t¶Å¡Ğ¬y°Ê Current financial liabilities at fair value through profit or loss,982349,40825
-33,2126,Á×ÀI¤§ª÷¿Ä­t¶Å¡Ğ¬y°Ê Current financial liabilities for hedging,1798,155832
-34,2170,À³¥I±b´Ú Accounts payable,38771066,32980933
-35,2180,À³¥I±b´Ú¡ĞÃö«Y¤H Accounts payable to related parties,1434900,1376499
-36,2200,¨ä¥LÀ³¥I´Ú Other payables,310383861,81586185
-37,2201,À³¥IÁ~¸ê Wages and salaries payable,16272353,14471372
-38,2206,À³¥I­û¤u¬õ§Q Employee bonus payable,23288499,23631882
-39,2207,À³¥I¸³ºÊ¨Æ¹S³Ò Compensation due to directors and supervisors,360404,349272
-40,2213,À³¥I³]³Æ´Ú Payable on machinery and equipment,140810703,43133659
-41,2216,"À³¥IªÑ§Q Dividends payable, non-cash assets distributions",129651902,0
-42,2230,¥»´Á©Ò±oµ|­t¶Å Current tax liabilities,32466156,38987053
-43,2300,¨ä¥L¬y°Ê­t¶Å Other current liabilities,88173281,96660619
-44,2320,"¤@¦~©Î¤@Àç·~¶g´Á¤º¨ì´Áªø´Á­t¶Å Long-term liabilities, current portion",31800000,34900000
-45,2399,"¨ä¥L¬y°Ê­t¶Å¡Ğ¨ä¥L Other current liabilities, others",56373281,61760619
-46,21XX,¬y°Ê­t¶Å¦X­p Total current liabilities,590735701,340542586
-47,,«D¬y°Ê­t¶Å Non-current liabilities,,
-48,2530,À³¥I¤½¥q¶Å Bonds payable,25100000,56900000
-49,2570,»¼©µ©Ò±oµ|­t¶Å Deferred tax liabilities,344393,233284
-50,2580,¯²¸î­t¶Å¡Ğ«D¬y°Ê Non-current lease liabilities,15041833,0
-51,2600,¨ä¥L«D¬y°Ê­t¶Å Other non-current liabilities,11487679,14955772
-52,2640,"²b½T©wºÖ§Q­t¶Å-«D¬y°Ê Net defined benefit liability, non-current",9182496,9651405
-53,2645,¦s¤J«OÃÒª÷ Guarantee deposits received,176904,3353378
-54,2670,"¨ä¥L«D¬y°Ê­t¶Å¡Ğ¨ä¥L Other non-current liabilities, others",2128279,1950989
-55,25XX,«D¬y°Ê­t¶Å¦X­p Total non-current liabilities,51973905,72089056
-56,2XXX,­t¶ÅÁ`­p Total liabilities,642709606,412631642
-57,,Åv¯q¡@Equity,,
-58,,ÂkÄİ©ó¥À¤½¥q·~¥D¤§Åv¯q Equity attributable to owners of parent,,
-59,,ªÑ¥» Share capital,,
-60,3110,´¶³qªÑªÑ¥» Ordinary share,259303805,259303805
-61,3100,ªÑ¥»¦X­p Total capital stock,259303805,259303805
-62,,¸ê¥»¤½¿n Capital surplus,,
-63,3210,"¸ê¥»¤½¿n¡Ğµo¦æ·¸»ù Capital surplus, additional paid-in capital",33077786,33077786
-64,3211,"¸ê¥»¤½¿n¡Ğ´¶³qªÑªÑ²¼·¸»ù Capital surplus, additional paid-in capital arising from ordinary share",24184939,24184939
-65,3213,"¸ê¥»¤½¿n¡ĞÂà´«¤½¥q¶ÅÂà´«·¸»ù Capital surplus, additional paid-in capital arising from bond conversion",8892847,8892847
-66,3235,"¸ê¥»¤½¿n¡Ğ»{¦C¹ï¤l¤½¥q©Ò¦³ÅvÅv¯qÅÜ°Ê¼Æ Capital Surplus, changes in ownership interests in subsidiaries",121843,121473
-67,3250,"¸ê¥»¤½¿n¡Ğ¨üÃØ¸ê²£ Capital surplus, donated assets received",33336,29343
-68,3252,"¸ê¥»¤½¿n¡Ğ¨ä¥L¨üÃØ¸ê²£ Capital surplus, other donated assets received",33336,29343
-69,3260,"¸ê¥»¤½¿n¡Ğ±Ä¥ÎÅv¯qªk»{¦CÃöÁp¥ø·~¤Î¦X¸êªÑÅv²b­È¤§ÅÜ°Ê¼Æ Capital surplus, changes in equity of associates and joint ventures accounted for using equity method",302234,282820
-70,3270,"¸ê¥»¤½¿n¡Ğ¦X¨Ö·¸ÃB Capital surplus, net assets from merger",22804510,22804510
-71,3200,¸ê¥»¤½¿n¦X­p Total capital surplus,56339709,56315932
-72,,«O¯d¬Õ¾l Retained earnings,,
-73,3310,ªk©w¬Õ¾l¤½¿n Legal reserve,311146899,276033811
-74,3320,¯S§O¬Õ¾l¤½¿n Special reserve,10675106,26907527
-75,3350,¥¼¤À°t¬Õ¾l¡]©Î«İÀ±¸ÉÁ«·l¡^ Unappropriated retained earnings (accumulated deficit),1011512974,1073706503
-76,3300,«O¯d¬Õ¾l¦X­p Total retained earnings,1333334979,1376647841
-77,,¨ä¥LÅv¯q Other equity interest,,
-78,3400,¨ä¥LÅv¯q¦X­p Total other equity interest,"(27,568,369)","(15,449,913)"
-79,31XX,ÂkÄİ©ó¥À¤½¥q·~¥D¤§Åv¯q¦X­p Total equity attributable to owners of parent,1621410124,1676817665
-80,36XX,«D±±¨îÅv¯q Non-controlling interests,685302,678731
-81,3XXX,Åv¯qÁ`­p Total equity,1622095426,1677496396
-82,3X2X,­t¶Å¤ÎÅv¯qÁ`­p¡@Total liabilities and equity,2264805032,2090128038
-83,3998,¹w¦¬ªÑ´Ú¡]Åv¯q¶µ¤U¡^¤§¬ù·íµo¦æªÑ¼Æ¡@Equivalent issue shares of advance receipts for ordinary share,0,0
-84,3999,¥À¤½¥qº[¤l¤½¥q©Ò«ù¦³¤§¥À¤½¥q®wÂÃªÑªÑ¼Æ¡]³æ¦ì¡GªÑ¡^¡@Number of shares in entity held by entity and by its subsidiaries,0,0
+0,,è³‡ç”¢Assets,,
+1,,æµå‹•è³‡ç”¢ã€€Current assets,,
+2,1100,ç¾é‡‘åŠç´„ç•¶ç¾é‡‘ Cash and cash equivalents,455399336,577814601
+3,1110,é€éæç›ŠæŒ‰å…¬å…åƒ¹å€¼è¡¡é‡ä¹‹é‡‘èè³‡ç”¢ï¼æµå‹• Current financial assets at fair value through profit or loss,326839,3504590
+4,1120,é€éå…¶ä»–ç¶œåˆæç›ŠæŒ‰å…¬å…åƒ¹å€¼è¡¡é‡ä¹‹é‡‘èè³‡ç”¢ï¼æµå‹• Current financial assets at fair value through other comprehensive income,127396577,99561740
+5,1136,æŒ‰æ”¤éŠ·å¾Œæˆæœ¬è¡¡é‡ä¹‹é‡‘èè³‡ç”¢ï¼æµå‹• Current financial assets at amortised cost,299884,14277615
+6,1139,é¿éšªä¹‹é‡‘èè³‡ç”¢ï¼æµå‹• Current financial assets for hedging,25884,23497
+7,1170,"æ‡‰æ”¶å¸³æ¬¾æ·¨é¡ Accounts receivable, net",138908589,128613391
+8,1180,"æ‡‰æ”¶å¸³æ¬¾ï¼é—œä¿‚äººæ·¨é¡ Accounts receivable due from related parties, net",862070,584412
+9,1210,å…¶ä»–æ‡‰æ”¶æ¬¾ï¼é—œä¿‚äºº Other receivables due from related parties,51653,65028
+10,130X,å­˜è²¨ Current inventories,82981196,103230976
+11,1470,å…¶ä»–æµå‹•è³‡ç”¢ Other current assets,16361886,24003871
+12,1476,å…¶ä»–é‡‘èè³‡ç”¢ï¼æµå‹• Other current financial assets,11041091,18597448
+13,1479,"å…¶ä»–æµå‹•è³‡ç”¢ï¼å…¶ä»– Other current assets, others",5320795,5406423
+14,11XX,æµå‹•è³‡ç”¢åˆè¨ˆ Total current assets,822613914,951679721
+15,,éæµå‹•è³‡ç”¢ã€€Non-current assets,,
+16,1517,é€éå…¶ä»–ç¶œåˆæç›ŠæŒ‰å…¬å…åƒ¹å€¼è¡¡é‡ä¹‹é‡‘èè³‡ç”¢ï¼éæµå‹• Non-current financial assets at fair value through other comprehensive income,4124337,3910681
+17,1535,æŒ‰æ”¤éŠ·å¾Œæˆæœ¬è¡¡é‡ä¹‹é‡‘èè³‡ç”¢ï¼éæµå‹• Non-current financial assets at amortised cost,7348914,7528277
+18,1550,æ¡ç”¨æ¬Šç›Šæ³•ä¹‹æŠ•è³‡ Investments accounted for using equity method,18698788,17865838
+19,1600,"ä¸å‹•ç”¢ã€å» æˆ¿åŠè¨­å‚™ Property, plant and equipment",1352377405,1072050279
+20,1755,ä½¿ç”¨æ¬Šè³‡ç”¢ Right-of-use assets,17232402,0
+21,1780,ç„¡å½¢è³‡ç”¢ Intangible assets,20653028,17002137
+22,1840,éå»¶æ‰€å¾—ç¨…è³‡ç”¢ Deferred tax assets,17928358,16806387
+23,1900,å…¶ä»–éæµå‹•è³‡ç”¢ Other non-current assets,3827886,3284718
+24,1920,å­˜å‡ºä¿è­‰é‡‘ Guarantee deposits paid,2084968,1700071
+25,1990,"å…¶ä»–éæµå‹•è³‡ç”¢ï¼å…¶ä»– Other non-current assets, others",1742918,1584647
+26,15XX,éæµå‹•è³‡ç”¢åˆè¨ˆ Total non-current assets,1442191118,1138448317
+27,1XXX,è³‡ç”¢ç¸½è¨ˆã€€Total assets,2264805032,2090128038
+28,,è² å‚µåŠæ¬Šç›ŠLiabilities and equity,,
+29,,è² å‚µã€€Liabilities,,
+30,,æµå‹•è² å‚µ Current liabilities,,
+31,2100,çŸ­æœŸå€Ÿæ¬¾ Current borrowings,118522290,88754640
+32,2120,é€éæç›ŠæŒ‰å…¬å…åƒ¹å€¼è¡¡é‡ä¹‹é‡‘èè² å‚µï¼æµå‹• Current financial liabilities at fair value through profit or loss,982349,40825
+33,2126,é¿éšªä¹‹é‡‘èè² å‚µï¼æµå‹• Current financial liabilities for hedging,1798,155832
+34,2170,æ‡‰ä»˜å¸³æ¬¾ Accounts payable,38771066,32980933
+35,2180,æ‡‰ä»˜å¸³æ¬¾ï¼é—œä¿‚äºº Accounts payable to related parties,1434900,1376499
+36,2200,å…¶ä»–æ‡‰ä»˜æ¬¾ Other payables,310383861,81586185
+37,2201,æ‡‰ä»˜è–ªè³‡ Wages and salaries payable,16272353,14471372
+38,2206,æ‡‰ä»˜å“¡å·¥ç´…åˆ© Employee bonus payable,23288499,23631882
+39,2207,æ‡‰ä»˜è‘£ç›£äº‹é…¬å‹ Compensation due to directors and supervisors,360404,349272
+40,2213,æ‡‰ä»˜è¨­å‚™æ¬¾ Payable on machinery and equipment,140810703,43133659
+41,2216,"æ‡‰ä»˜è‚¡åˆ© Dividends payable, non-cash assets distributions",129651902,0
+42,2230,æœ¬æœŸæ‰€å¾—ç¨…è² å‚µ Current tax liabilities,32466156,38987053
+43,2300,å…¶ä»–æµå‹•è² å‚µ Other current liabilities,88173281,96660619
+44,2320,"ä¸€å¹´æˆ–ä¸€ç‡Ÿæ¥­é€±æœŸå…§åˆ°æœŸé•·æœŸè² å‚µ Long-term liabilities, current portion",31800000,34900000
+45,2399,"å…¶ä»–æµå‹•è² å‚µï¼å…¶ä»– Other current liabilities, others",56373281,61760619
+46,21XX,æµå‹•è² å‚µåˆè¨ˆ Total current liabilities,590735701,340542586
+47,,éæµå‹•è² å‚µ Non-current liabilities,,
+48,2530,æ‡‰ä»˜å…¬å¸å‚µ Bonds payable,25100000,56900000
+49,2570,éå»¶æ‰€å¾—ç¨…è² å‚µ Deferred tax liabilities,344393,233284
+50,2580,ç§Ÿè³ƒè² å‚µï¼éæµå‹• Non-current lease liabilities,15041833,0
+51,2600,å…¶ä»–éæµå‹•è² å‚µ Other non-current liabilities,11487679,14955772
+52,2640,"æ·¨ç¢ºå®šç¦åˆ©è² å‚µ-éæµå‹• Net defined benefit liability, non-current",9182496,9651405
+53,2645,å­˜å…¥ä¿è­‰é‡‘ Guarantee deposits received,176904,3353378
+54,2670,"å…¶ä»–éæµå‹•è² å‚µï¼å…¶ä»– Other non-current liabilities, others",2128279,1950989
+55,25XX,éæµå‹•è² å‚µåˆè¨ˆ Total non-current liabilities,51973905,72089056
+56,2XXX,è² å‚µç¸½è¨ˆ Total liabilities,642709606,412631642
+57,,æ¬Šç›Šã€€Equity,,
+58,,æ­¸å±¬æ–¼æ¯å…¬å¸æ¥­ä¸»ä¹‹æ¬Šç›Š Equity attributable to owners of parent,,
+59,,è‚¡æœ¬ Share capital,,
+60,3110,æ™®é€šè‚¡è‚¡æœ¬ Ordinary share,259303805,259303805
+61,3100,è‚¡æœ¬åˆè¨ˆ Total capital stock,259303805,259303805
+62,,è³‡æœ¬å…¬ç© Capital surplus,,
+63,3210,"è³‡æœ¬å…¬ç©ï¼ç™¼è¡Œæº¢åƒ¹ Capital surplus, additional paid-in capital",33077786,33077786
+64,3211,"è³‡æœ¬å…¬ç©ï¼æ™®é€šè‚¡è‚¡ç¥¨æº¢åƒ¹ Capital surplus, additional paid-in capital arising from ordinary share",24184939,24184939
+65,3213,"è³‡æœ¬å…¬ç©ï¼è½‰æ›å…¬å¸å‚µè½‰æ›æº¢åƒ¹ Capital surplus, additional paid-in capital arising from bond conversion",8892847,8892847
+66,3235,"è³‡æœ¬å…¬ç©ï¼èªåˆ—å°å­å…¬å¸æ‰€æœ‰æ¬Šæ¬Šç›Šè®Šå‹•æ•¸ Capital Surplus, changes in ownership interests in subsidiaries",121843,121473
+67,3250,"è³‡æœ¬å…¬ç©ï¼å—è´ˆè³‡ç”¢ Capital surplus, donated assets received",33336,29343
+68,3252,"è³‡æœ¬å…¬ç©ï¼å…¶ä»–å—è´ˆè³‡ç”¢ Capital surplus, other donated assets received",33336,29343
+69,3260,"è³‡æœ¬å…¬ç©ï¼æ¡ç”¨æ¬Šç›Šæ³•èªåˆ—é—œè¯ä¼æ¥­åŠåˆè³‡è‚¡æ¬Šæ·¨å€¼ä¹‹è®Šå‹•æ•¸ Capital surplus, changes in equity of associates and joint ventures accounted for using equity method",302234,282820
+70,3270,"è³‡æœ¬å…¬ç©ï¼åˆä½µæº¢é¡ Capital surplus, net assets from merger",22804510,22804510
+71,3200,è³‡æœ¬å…¬ç©åˆè¨ˆ Total capital surplus,56339709,56315932
+72,,ä¿ç•™ç›ˆé¤˜ Retained earnings,,
+73,3310,æ³•å®šç›ˆé¤˜å…¬ç© Legal reserve,311146899,276033811
+74,3320,ç‰¹åˆ¥ç›ˆé¤˜å…¬ç© Special reserve,10675106,26907527
+75,3350,æœªåˆ†é…ç›ˆé¤˜ï¼ˆæˆ–å¾…å½Œè£œè™§æï¼‰ Unappropriated retained earnings (accumulated deficit),1011512974,1073706503
+76,3300,ä¿ç•™ç›ˆé¤˜åˆè¨ˆ Total retained earnings,1333334979,1376647841
+77,,å…¶ä»–æ¬Šç›Š Other equity interest,,
+78,3400,å…¶ä»–æ¬Šç›Šåˆè¨ˆ Total other equity interest,"(27,568,369)","(15,449,913)"
+79,31XX,æ­¸å±¬æ–¼æ¯å…¬å¸æ¥­ä¸»ä¹‹æ¬Šç›Šåˆè¨ˆ Total equity attributable to owners of parent,1621410124,1676817665
+80,36XX,éæ§åˆ¶æ¬Šç›Š Non-controlling interests,685302,678731
+81,3XXX,æ¬Šç›Šç¸½è¨ˆ Total equity,1622095426,1677496396
+82,3X2X,è² å‚µåŠæ¬Šç›Šç¸½è¨ˆã€€Total liabilities and equity,2264805032,2090128038
+83,3998,é æ”¶è‚¡æ¬¾ï¼ˆæ¬Šç›Šé …ä¸‹ï¼‰ä¹‹ç´„ç•¶ç™¼è¡Œè‚¡æ•¸ã€€Equivalent issue shares of advance receipts for ordinary share,0,0
+84,3999,æ¯å…¬å¸æš¨å­å…¬å¸æ‰€æŒæœ‰ä¹‹æ¯å…¬å¸åº«è—è‚¡è‚¡æ•¸ï¼ˆå–®ä½ï¼šè‚¡ï¼‰ã€€Number of shares in entity held by entity and by its subsidiaries,0,0

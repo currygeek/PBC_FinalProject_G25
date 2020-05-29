@@ -1,5 +1,6 @@
 # Test for Github and crawling stock
 import requests
+from bs4 import BeautifulSoup
 import csv, json
 import pandas as pd
 import time, datetime
@@ -35,6 +36,38 @@ def get_last_month_date(str_date):
     return new_year + new_month + "01"
 
 
+class market_value_table():
+    def __init__(self):
+        pass
+
+    def crawl_market_value_table(self):
+        url = "https://www.taifex.com.tw/cht/9/futuresQADetail"
+        mv_web = requests.get(url)
+        print("check")
+        soup = BeautifulSoup(mv_web.text, "html.parser")
+        bs_table = soup.find_all('table')[0]
+        l_bs_table = bs_table.text.replace(" ", "").replace("\r", "").split("\n")[10:]
+        
+        d_table = {"Rank":[], "Stock_id":[], "Company_name":[], "Proportion":[]}
+        for i in range(len(l_bs_table)):
+            if not i % 5 == 0:
+                pass
+            else:
+                d_table["Rank"].append(int(l_bs_table[i]))
+                d_table["Stock_id"].append(int(l_bs_table[i+1]))
+                d_table["Company_name"].append(l_bs_table[i+2])
+                d_table["Proportion"].append(float(l_bs_table[i+3].replace("%", "")) / 100)
+        self.mv_table = pd.DataFrame(d_table).sort_values(["Rank"]).reset_index(drop = True)
+        print(self.mv_table)
+        time.sleep(1)
+    
+    def write_mb_table_to_csv(self):
+        now_path = os.getcwd()
+        target_csv = open(now_path + "\\" +"Market_Value_Table.csv", "w", newline="", encoding="UTF-8")
+        self.mv_table.to_csv(target_csv)
+        target_csv.close()
+
+
 class company_stock():
     def __init__(self, year, index, name):  # wait for stock price input
         self.index = index
@@ -50,7 +83,7 @@ class company_stock():
             l_date = row[0].split("/")
             this_year = int(l_date[0]) + 1911  # 109 to 2020
             this_year = str(this_year)
-            self.price_dict["Date"].append(this_year + l_date[1] + l_date[2])
+            self.price_dict["Date"].append(int(this_year + l_date[1] + l_date[2]))
             self.price_dict["Volume"].append(int(row[1].replace(",", "")))
             self.price_dict["Trade_value"].append(int(row[2].replace(",", "")))
             self.price_dict["Opening"].append(float(row[3]))
@@ -70,7 +103,7 @@ class company_stock():
         for i in range(12):  # depend on how many month we want to crawl
             self.crawl_a_month_price(date)
             date = get_last_month_date(date)
-        self.price_data = pd.DataFrame(self.price_dict)
+        self.price_data = pd.DataFrame(self.price_dict).sort_values(["Date"]).reset_index(drop = True)
         print(self.price_data)
     
     def crawl_fs(self):
@@ -86,13 +119,13 @@ class company_stock():
     
     def write_price_to_csv(self):
         now_path = os.getcwd()
-        target_csv = open(now_path + "\\" + self.name +"_prices" + ".csv","w",newline="")
+        target_csv = open(now_path + "\\" + self.name +"_prices" + ".csv","w",newline="", encoding="UTF-8")
         self.price_data.to_csv(target_csv)
         target_csv.close()
 
     def write_fs_to_csv(self, fs, file_name):
         now_path = os.getcwd()
-        target_csv = open(now_path + "\\" + file_name + ".csv","w",newline="")
+        target_csv = open(now_path + "\\" + file_name + ".csv","w",newline="", encoding="UTF-8")
         fs.to_csv(target_csv)
         target_csv.close()
 
@@ -101,6 +134,10 @@ year = datetime.datetime.now().year
 month = datetime.datetime.now().month
 day = datetime.datetime.now().day
 now_str_date = str(year) + get_str_month(month) + get_str_day(day)
+
+mv_table = market_value_table()
+mv_table.crawl_market_value_table()
+mv_table.write_mb_table_to_csv()
 
 stock_id = 2330
 tsmc = company_stock(year, stock_id, "TSMC")
