@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv, json
 import pandas as pd
+import numpy as np
 import time, datetime
 import os
 from io import StringIO
@@ -109,6 +110,9 @@ class company_stock():
             date = get_last_month_date(date)
         self.price_data = pd.DataFrame(self.price_dict).sort_values(["Date"], ascending=False).reset_index(drop = True)
         self.price_list = [round((o+h+l+c)/4, 4) for o, h, l, c in zip(self.price_data["Opening"], self.price_data["Highest"], self.price_data["Lowest"], self.price_data["Closing"])]
+        self.mean = round(np.mean(self.price_list), 4)
+        self.std = round(np.std(self.price_list, ddof=1), 4)  # Sample standard deviation
+        print(self.mean, self.std)
     
     def crawl_fs(self):
         fs_web = requests.get(self.fs_url)
@@ -120,6 +124,11 @@ class company_stock():
         self.bs_sheet.columns = ["Code", "Title", str(year-1), str(year-2)]
         # print(self.bs_sheet)
         # Capability of adding more financial statement here
+    
+    def compute_cov_with_market(self, market_price_list):
+        self.cov = np.cov(self.price_list, market_price_list)[0][1]
+        self.beta_m = round(self.cov/(self.std ** 2), 4)
+        print(self.cov, self.beta_m)
     
     def write_price_to_csv(self):
         target_csv = open(self.stock_path + "\\" + "prices" + ".csv","w",newline="", encoding="UTF-8")
@@ -153,6 +162,9 @@ class market_portfolio():
             self.price_list.append(price)
         price_dict["Price"] = self.price_list
         self.market_price_data = pd.DataFrame(price_dict)
+
+        for stock in self.market_list:
+            stock.compute_cov_with_market(self.price_list)
         # print(self.market_price_data)
     
     def write_market_port_to_csv(self):
@@ -173,7 +185,7 @@ mv_table = market_value_table()
 mv_table.crawl_market_value_table()
 mv_table.write_mb_table_to_csv()
 
-comany_amount = 5  # How many company do we want to crawl
+comany_amount = 1  # How many company do we want to crawl
 # Crawling top companies
 market_port_com_list = []  # Company in the market portifolio
 for i in range(1, comany_amount+1):
