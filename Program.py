@@ -93,14 +93,10 @@ class company_stock():
             self.price_dict["Date"].append(int(this_year + l_date[1] + l_date[2]))
             self.price_dict["Volume"].append(int(row[1].replace(",", "")))
             self.price_dict["Trade_value"].append(int(row[2].replace(",", "")))
-            open_price = "".join(row[3].split(","))
-            highest_price = "".join(row[4].split(","))
-            lowest_price = "".join(row[5].split(","))
-            close_price = "".join(row[6].split(","))
-            self.price_dict["Opening"].append(float(open_price))
-            self.price_dict["Highest"].append(float(highest_price))
-            self.price_dict["Lowest"].append(float(lowest_price))
-            self.price_dict["Closing"].append(float(close_price))
+            self.price_dict["Opening"].append(float(row[3]))
+            self.price_dict["Highest"].append(float(row[4]))
+            self.price_dict["Lowest"].append(float(row[5]))
+            self.price_dict["Closing"].append(float(row[6]))
             if row[7] == "X0.00":
                 self.price_dict["Change"].append(0.00)
             else:
