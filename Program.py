@@ -112,7 +112,7 @@ class company_stock():
     def crawl_stock_prices(self):
         self.price_dict = {"Date":[], "Volume":[], "Trade_value":[], "Opening":[], "Highest":[], "Lowest":[], "Closing":[], "Change":[], "Transaction":[]}
         date = now_str_date
-        for i in range(2):  # depend on how many month we want to crawl
+        for i in range(3):  # depend on how many month we want to crawl
             self.crawl_a_month_price(date)
             date = get_last_month_date(date)
         self.price_data = pd.DataFrame(self.price_dict).sort_values(["Date"], ascending=False).reset_index(drop = True)
@@ -194,7 +194,7 @@ class company_stock():
         plotter.ylabel("Price")
         plotter.show()
         plotter.close()
-        
+
 
 class market_portfolio():
     def __init__(self, num,  market_list):
@@ -258,6 +258,17 @@ class market_portfolio():
         # print(self.market_list[0].risk_premium_mean)
         # print(self.market_list[1].risk_premium_mean)
 
+    def write_risk_premium_to_csv(self):
+        now_path = os.getcwd()
+        target_csv = open(now_path + "\\" + "Market_Portfolio_Risk_Premium.csv", "w", newline="", encoding="UTF-8")
+        for r in range(len(self.risk_premium_list)):
+            if r == 0:
+                target_csv.write(str(self.risk_premium_list[r]))
+            else:
+                target_csv.write("," + str(self.risk_premium_list[r]))
+        target_csv.close()
+
+
 
 # Main
 year = datetime.datetime.now().year
@@ -269,34 +280,38 @@ day = 29
 now_str_date = str(year) + get_str_month(month) + get_str_day(day)
 risk_free_rate = 0.00217  # one year CD rate for Bank of Taiwan
 
-# Crawling market value table
-mv_table = market_value_table()
-mv_table.crawl_market_value_table()
-mv_table.write_mb_table_to_csv()
+update = input("Do you want to update data? [y/n]: ")
+if update == ("y" or "Y"):
+    # Crawling market value table
+    mv_table = market_value_table()
+    mv_table.crawl_market_value_table()
+    mv_table.write_mb_table_to_csv()
 
-comany_amount = 20  # How many company do we want to crawl
-# Crawling top companies
-market_port_com_list = []  # Company in the market portifolio
-for i in range(1, comany_amount+1):
-    print(i)
-    print()
-    row = mv_table.mv_table.loc[mv_table.mv_table["Rank"] == i, :]
-    this_company = company_stock(int(row.iloc[0]["Stock_id"]), row.iloc[0]["Company_name"], float(row.iloc[0]["Proportion"]))
-    market_port_com_list.append(this_company)
-    this_company.crawl_stock_prices()
-##    this_company.write_price_to_csv()
-    this_company.crawl_fs()
-    this_company.compute_return_rate()
-##    this_company.plot_price()
-##    this_company.write_fs_to_csv(this_company.bs_sheet, "bs_sheet")
-##    this_company.write_fs_to_csv(this_company.statement_of_CI, "Statement_of_Comprehensive_Income")
-##    this_company.write_fs_to_csv(this_company.statement_of_CF, "Statement_of_Cash_Flows")
+    comany_amount = 2  # How many company do we want to crawl
+    # Crawling top companies
+    market_port_com_list = []  # Company in the market portifolio
+    for i in range(1, comany_amount+1):
+        print(i)
+        print()
+        row = mv_table.mv_table.loc[mv_table.mv_table["Rank"] == i, :]
+        this_company = company_stock(int(row.iloc[0]["Stock_id"]), row.iloc[0]["Company_name"], float(row.iloc[0]["Proportion"]))
+        market_port_com_list.append(this_company)
+        this_company.crawl_stock_prices()
+    ##    this_company.write_price_to_csv()
+        this_company.crawl_fs()
+        this_company.compute_return_rate()
+    ##    this_company.plot_price()
+    ##    this_company.write_fs_to_csv(this_company.bs_sheet, "bs_sheet")
+    ##    this_company.write_fs_to_csv(this_company.statement_of_CI, "Statement_of_Comprehensive_Income")
+    ##    this_company.write_fs_to_csv(this_company.statement_of_CF, "Statement_of_Cash_Flows")
 
-# Forming market portfolio
-market_port = market_portfolio(comany_amount, market_port_com_list)
-market_port.compute_market_port()
-##market_port.write_market_port_to_csv()
-##market_port.plot_SML()
+    # Forming market portfolio
+    market_port = market_portfolio(comany_amount, market_port_com_list)
+    market_port.compute_market_port()
+    market_port.write_market_port_to_csv()
+    ##market_port.plot_SML()
+    market_port.write_risk_premium_to_csv()
+
 
 """
 following: lineal model
@@ -310,7 +325,9 @@ target_co.crawl_fs()
 target_co.compute_return_rate()
 
 # Run regression
-market_port_risk_premium_4lm = np.array(market_port.risk_premium_list).reshape(-1 ,1)
+with open(file=os.getcwd()+ r"\\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
+    market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
+    market_port_risk_premium_4lm = np.array(market_port_risk_premium).reshape(-1 ,1)
 target_co_risk_prmium_4lm = np.array(target_co.risk_premium_list).reshape(-1, 1)
 lm = LinearRegression()
 lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
@@ -321,18 +338,18 @@ print("R Square:", lm.score(market_port_risk_premium_4lm, target_co_risk_prmium_
 """
 # following: Capital Market Line
 # not complete yet
+"""
 
 
 def CML(E_r):
     E_risk_premium = E_r - risk_free_rate
-    rf_asset_ratio = E_risk_premium / market_port.risk_premium_mean
+    rf_asset_ratio = 1 - (E_risk_premium / np.mean(market_port_risk_premium))
     return rf_asset_ratio
 
+
 flag = "Y"
-while flag == "Y":
+while flag == ("Y" or "y"):
     E_r = float(input("Please enter your required daily RoR: "))
-    print(market_port.risk_premium_mean)
     ratio = CML(E_r)
     print("You should put %.4f in risk-free asset, and the rest in market portfolio" % ratio)
-    flag = input("Continue? [Y/N]")
-"""
+    flag = input("Continue? [y/n]: ")
