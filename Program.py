@@ -274,7 +274,7 @@ mv_table = market_value_table()
 mv_table.crawl_market_value_table()
 mv_table.write_mb_table_to_csv()
 
-comany_amount = 8  # How many company do we want to crawl
+comany_amount = 20  # How many company do we want to crawl
 # Crawling top companies
 market_port_com_list = []  # Company in the market portifolio
 for i in range(1, comany_amount+1):
@@ -317,3 +317,22 @@ lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
 print("alpha:   ",  lm.intercept_)
 print("beta:    ", lm.coef_)
 print("R Square:", lm.score(market_port_risk_premium_4lm, target_co_risk_prmium_4lm))
+
+"""
+# following: Capital Market Line
+# not complete yet
+
+
+def CML(E_r):
+    E_risk_premium = E_r - risk_free_rate
+    rf_asset_ratio = E_risk_premium / market_port.risk_premium_mean
+    return rf_asset_ratio
+
+flag = "Y"
+while flag == "Y":
+    E_r = float(input("Please enter your required daily RoR: "))
+    print(market_port.risk_premium_mean)
+    ratio = CML(E_r)
+    print("You should put %.4f in risk-free asset, and the rest in market portfolio" % ratio)
+    flag = input("Continue? [Y/N]")
+"""
