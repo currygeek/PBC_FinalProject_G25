@@ -9,6 +9,7 @@ import os
 from io import StringIO
 import matplotlib.pyplot as plotter
 import matplotlib.dates as mdates
+from sklearn.linear_model import LinearRegression
 
 
 def get_str_month(month):
@@ -273,27 +274,46 @@ mv_table = market_value_table()
 mv_table.crawl_market_value_table()
 mv_table.write_mb_table_to_csv()
 
-comany_amount = 2  # How many company do we want to crawl
+comany_amount = 8  # How many company do we want to crawl
 # Crawling top companies
 market_port_com_list = []  # Company in the market portifolio
 for i in range(1, comany_amount+1):
+    print(i)
     print()
     row = mv_table.mv_table.loc[mv_table.mv_table["Rank"] == i, :]
     this_company = company_stock(int(row.iloc[0]["Stock_id"]), row.iloc[0]["Company_name"], float(row.iloc[0]["Proportion"]))
     market_port_com_list.append(this_company)
     this_company.crawl_stock_prices()
-    this_company.write_price_to_csv()
+##    this_company.write_price_to_csv()
     this_company.crawl_fs()
     this_company.compute_return_rate()
-    this_company.plot_price()
-    this_company.write_fs_to_csv(this_company.bs_sheet, "bs_sheet")
-    this_company.write_fs_to_csv(this_company.statement_of_CI, "Statement_of_Comprehensive_Income")
-    this_company.write_fs_to_csv(this_company.statement_of_CF, "Statement_of_Cash_Flows")
+##    this_company.plot_price()
+##    this_company.write_fs_to_csv(this_company.bs_sheet, "bs_sheet")
+##    this_company.write_fs_to_csv(this_company.statement_of_CI, "Statement_of_Comprehensive_Income")
+##    this_company.write_fs_to_csv(this_company.statement_of_CF, "Statement_of_Cash_Flows")
 
 # Forming market portfolio
 market_port = market_portfolio(comany_amount, market_port_com_list)
 market_port.compute_market_port()
-market_port.write_market_port_to_csv()
-market_port.plot_SML()
+##market_port.write_market_port_to_csv()
+##market_port.plot_SML()
 
+"""
+following: lineal model
+"""
 
+# Choose the target company
+target_co_info = "2412,中華電".split(",")  # we can let user input this in later version
+target_co = company_stock(int(target_co_info[0]), target_co_info[1], "NA")
+target_co.crawl_stock_prices()
+target_co.crawl_fs()
+target_co.compute_return_rate()
+
+# Run regression
+market_port_risk_premium_4lm = np.array(market_port.risk_premium_list).reshape(-1 ,1)
+target_co_risk_prmium_4lm = np.array(target_co.risk_premium_list).reshape(-1, 1)
+lm = LinearRegression()
+lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
+print("alpha:   ",  lm.intercept_)
+print("beta:    ", lm.coef_)
+print("R Square:", lm.score(market_port_risk_premium_4lm, target_co_risk_prmium_4lm))
