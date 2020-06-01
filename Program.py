@@ -1,5 +1,6 @@
 # Final Project: crawling stock and doing CAPM, some financial statement analysis
 import requests
+import random
 from bs4 import BeautifulSoup
 import json
 import pandas as pd
@@ -64,7 +65,8 @@ class market_value_table():
                 d_table["Proportion"].append(float(l_bs_table[i+3].replace("%", "")) / 100)
         self.mv_table = pd.DataFrame(d_table).sort_values(["Rank"]).reset_index(drop = True)
         print(self.mv_table)
-        time.sleep(1)
+        time.sleep(random.randint(3, 8))
+        mv_web.close()
     
     def write_mb_table_to_csv(self):
         now_path = os.getcwd()
@@ -107,7 +109,8 @@ class company_stock():
             else:
                 self.price_dict["Change"].append(float(row[7]))
             self.price_dict["Transaction"].append(int(row[8].replace(",", "")))
-        time.sleep(1)
+        time.sleep(random.randint(3, 8))
+        price_web.close()
 
     def crawl_stock_prices(self):
         self.price_dict = {"Date":[], "Volume":[], "Trade_value":[], "Opening":[], "Highest":[], "Lowest":[], "Closing":[], "Change":[], "Transaction":[]}
@@ -126,7 +129,7 @@ class company_stock():
         fs_web.encoding = "big5"
         print("check")  # sucessfully enter the website
         fs_datas = pd.read_html(StringIO(fs_web.text))
-        time.sleep(1)
+        time.sleep(random.randint(3, 8))
         self.bs_sheet = fs_datas[0]
         self.bs_sheet.columns = ["Code", "Title", str(year-1), str(year-2)]
         self.statement_of_CI = fs_datas[1]
@@ -146,6 +149,7 @@ class company_stock():
         self.last_div = int(self.last_div[1:][:-1].replace(",", ""))
         self.div_growth_rate = round(self.div/self.last_div, 4) - 1
         # Capability of adding more financial statement here
+        fs_web.close()
 
     def compute_return_rate(self):  # Return rate on daily basis (or the annual return rate cannot be computed with our data)
         NI_row = self.statement_of_CI.loc[self.statement_of_CI["Title"] == "本期淨利（淨損）Profit (loss)",:]
@@ -314,7 +318,7 @@ if update == ("y" or "Y"):
 
 
 """
-following: lineal model
+following: linear model
 """
 
 # Choose the target company
