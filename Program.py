@@ -328,84 +328,70 @@ class window(tk.Frame):
 
     def create_widgets(self):
         f1 = tkFont.Font(size=12, family="Courier New")
-        self.instrucion_lbl = tk.Label(self, text="Stock ID: ", height=1, width=12, font=f1)
+        self.instrucion1_lbl = tk.Label(self, text="Stock ID: ", height=1, width=12, font=f1)
         self.alpha_lbl = tk.Label(self, text="alpha: ", height=2, width=17, font=f1)
         self.beta_lbl = tk.Label(self, text="beta : ", height=2, width=17, font=f1)
         self.regression_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.regression)
         self.stock_id_txt = tk.Text(self, height=1, width=5, font=f1)
+        self.draw_price_btn = tk.Button(self, text="Draw!", height=1, width=5, font=f1, command=self.draw_price)
 
-        self.instrucion_lbl.grid(row=0, column=0)
+        self.instrucion1_lbl.grid(row=0, column=0, sticky=tk.E)
         self.alpha_lbl.grid(row=1, column=0)
         self.beta_lbl.grid(row=1, column=2)
         self.regression_btn.grid(row=0, column=3)
         self.stock_id_txt.grid(row=0, column=1, columnspan=2, sticky=tk.NE + tk.SW)
+        self.draw_price_btn.grid(row=1, column=5)
+
+        self.empty_lbl = tk.Label(self, text="")
+        self.empty_lbl.grid(row=2, column=0)
+
+        self.instrucion2_lbl = tk.Label(self, text="Required daily RoR: ", height=1, width=20, font=f1)
+        self.ratio_lbl = tk.Label(self, text="Suggest: ", height=2, font=f1)
+        self.complete_port_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.complete_port)
+        self.ror_txt = tk.Text(self, height=1, width=5, font=f1)
+
+        self.instrucion2_lbl.grid(row=3, column=0, columnspan=2, sticky=tk.E)
+        self.ratio_lbl.grid(row=4, column=0, columnspan=5, sticky=tk.NW)
+        self.complete_port_btn.grid(row=3, column=4)
+        self.ror_txt.grid(row=3, column=2, columnspan=2, sticky=tk.NE + tk.SW)
 
     def regression(self):
         """Run regression to find alpha and beta"""
         # choose the target stock
-        target_stock_id = int(self.stock_id_txt.get("1.0", tk.END))
-        target_co = company_stock(target_stock_id, "NA", "NA")
-        target_co.crawl_stock_prices()
-        target_co.crawl_fs()
-        target_co.compute_return_rate()
+        self.target_stock_id = int(self.stock_id_txt.get("1.0", tk.END))
+        self.target_co = company_stock(self.target_stock_id, "NA", "NA")
+        self.target_co.crawl_stock_prices()
+        self.target_co.crawl_fs()
+        self.target_co.compute_return_rate()
 
         # run regression
-        with open(file=os.getcwd()+ r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
+        with open(file=os.getcwd() + r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
             market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
-            market_port_risk_premium_4lm = np.array(market_port_risk_premium).reshape(-1 ,1)
-            target_co_risk_prmium_4lm = np.array(target_co.risk_premium_list).reshape(-1, 1)
-            lm = LinearRegression()
-            lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
-            # print("alpha:   ",  lm.intercept_)
-            # print("beta:    ", lm.coef_)
-            # print("R Square:", lm.score(market_port_risk_premium_4lm, target_co_risk_prmium_4lm))
+        market_port_risk_premium_4lm = np.array(market_port_risk_premium).reshape(-1, 1)
+        target_co_risk_prmium_4lm = np.array(self.target_co.risk_premium_list).reshape(-1, 1)
+        lm = LinearRegression()
+        lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
 
         self.alpha_lbl.configure(text="alpha: %.6f" % lm.intercept_)
         self.beta_lbl.configure(text="beta : %.6f" % lm.coef_)
 
+    def draw_price(self):
+        """Please execute the function "regression()" fist"""
+        self.target_co.plot_price()
+
+    def complete_port(self):
+        """
+        Use the Capital Market Line to provide a complete portfolio
+        composed of the market portfolio and the risk-free asset
+        """
+        target_RoR = float(self.ror_txt.get("1.0", tk.END))
+        target_rist_premium = target_RoR - risk_free_rate
+        with open(file=os.getcwd() + r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
+            market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
+        rf_asset_ratio = 1 - (target_rist_premium / np.mean(market_port_risk_premium))
+        self.ratio_lbl.configure(text="Suggest: You should put %.4f in risk-free asset,\nand the rest in market portfolio" % rf_asset_ratio)
+
+
 mywindow = window()
 mywindow.master.title("Program")
 mywindow.mainloop()
-
-"""
-following: linear model
-"""
-### Run Regression - Old Version
-
-# Choose the target company
-target_co_info = "2412,中華電".split(",")  # we can let user input this in later version
-target_co = company_stock(int(target_co_info[0]), target_co_info[1], "NA")
-target_co.crawl_stock_prices()
-target_co.crawl_fs()
-target_co.compute_return_rate()
-
-# Run regression
-with open(file=os.getcwd()+ r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
-    market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
-    market_port_risk_premium_4lm = np.array(market_port_risk_premium).reshape(-1 ,1)
-target_co_risk_prmium_4lm = np.array(target_co.risk_premium_list).reshape(-1, 1)
-lm = LinearRegression()
-lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
-print("alpha:   ",  lm.intercept_)
-print("beta:    ", lm.coef_)
-print("R Square:", lm.score(market_port_risk_premium_4lm, target_co_risk_prmium_4lm))
-"""
-
-"""
-# following: Capital Market Line
-# not complete yet
-"""
-
-def CML(E_r):
-    E_risk_premium = E_r - risk_free_rate
-    rf_asset_ratio = 1 - (E_risk_premium / np.mean(market_port_risk_premium))
-    return rf_asset_ratio
-
-
-flag = "Y"
-while flag == "y" or flag == "Y":
-    E_r = float(input("Please enter your required daily RoR: "))
-    ratio = CML(E_r)
-    print("You should put %.4f in risk-free asset, and the rest in market portfolio" % ratio)
-    flag = input("Continue? [y/n]: ")
-"""
