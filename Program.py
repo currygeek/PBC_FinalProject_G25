@@ -1,5 +1,6 @@
 # Final Project: crawling stock and doing CAPM, some financial statement analysis
 import requests
+import yfinance as yf
 import random
 from bs4 import BeautifulSoup
 import json
@@ -9,7 +10,6 @@ import time, datetime
 import os
 from io import StringIO
 import matplotlib.pyplot as plotter
-import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
 import tkinter as tk
 import tkinter.font as tkFont
@@ -97,33 +97,42 @@ class company_stock():
             this_year = str(this_year)
             self.price_dict["Date"].append(int(this_year + l_date[1] + l_date[2]))
             self.price_dict["Volume"].append(int(row[1].replace(",", "")))
-            self.price_dict["Trade_value"].append(int(row[2].replace(",", "")))
             open_price = "".join(row[3].split(","))
             highest_price = "".join(row[4].split(","))
             lowest_price = "".join(row[5].split(","))
             close_price = "".join(row[6].split(","))
-            self.price_dict["Opening"].append(float(open_price))
-            self.price_dict["Highest"].append(float(highest_price))
-            self.price_dict["Lowest"].append(float(lowest_price))
-            self.price_dict["Closing"].append(float(close_price))
-            if row[7] == "X0.00":
-                self.price_dict["Change"].append(0.00)
-            else:
-                self.price_dict["Change"].append(float(row[7]))
-            self.price_dict["Transaction"].append(int(row[8].replace(",", "")))
+            self.price_dict["Open"].append(float(open_price))
+            self.price_dict["High"].append(float(highest_price))
+            self.price_dict["Low"].append(float(lowest_price))
+            self.price_dict["Close"].append(float(close_price))
         time.sleep(random.randint(3, 8))
         price_web.close()
 
     def crawl_stock_prices(self):
-        self.price_dict = {"Date":[], "Volume":[], "Trade_value":[], "Opening":[], "Highest":[], "Lowest":[], "Closing":[], "Change":[], "Transaction":[]}
+        self.price_dict = {"Date":[], "Open":[], "High":[], "Low":[], "Close":[], "Volume":[]}
         date = now_str_date
         for i in range(3):  # depend on how many month we want to crawl
             self.crawl_a_month_price(date)
             date = get_last_month_date(date)
         self.price_data = pd.DataFrame(self.price_dict).sort_values(["Date"], ascending=False).reset_index(drop = True)
-        self.price_list = [round((o+h+l+c)/4, 4) for o, h, l, c in zip(self.price_data["Opening"], self.price_data["Highest"], self.price_data["Lowest"], self.price_data["Closing"])]
+        self.price_list = [round((o+h+l+c)/4, 4) for o, h, l, c in zip(self.price_data["Open"], self.price_data["High"], self.price_data["Low"], self.price_data["Close"])]
         self.price_mean = round(np.mean(self.price_list), 4)
         self.price_std = round(np.std(self.price_list, ddof=1), 4)  # Sample standard deviation
+
+    def crawl_yahoo(self):
+        stock = yf.Ticker(str(self.index)+".TW")
+        self.price_data = stock.history("2y")
+        self.price_data.drop(columns = ["Dividends", "Stock Splits"])
+        self.price_data.reset_index(inplace = True)
+        self.price_data["Date"] = [int(d.strftime("%Y%m%d")) for d in self.price_data["Date"]]
+        self.price_data = self.price_data.sort_values(["Date"], ascending = False)
+        # print(self.price_data)
+        self.price_list = [round((o+h+l+c)/4, 4) for o, h, l, c in zip(self.price_data["Open"], self.price_data["High"], self.price_data["Low"], self.price_data["Close"])]
+        self.price_mean = round(np.mean(self.price_list), 4)
+        self.price_std = round(np.std(self.price_list, ddof=1), 4)  # Sample standard deviation
+        # print(self.price_mean, self.price_std)
+        
+        
     
     def crawl_fs(self):
         fs_url = "https://mops.twse.com.tw/server-java/t164sb01?step=1"+"&"+"CO_ID="+str(self.index)+"&SYEAR="+str(year-1)+"&SSEASON=4&REPORT_ID=C"
@@ -293,7 +302,7 @@ if update == "y" or update == "Y":
     mv_table.crawl_market_value_table()
     mv_table.write_mb_table_to_csv()
 
-    comany_amount = 2  # How many company do we want to crawl
+    comany_amount = 1  # How many company do we want to crawl
     # Crawling top companies
     market_port_com_list = []  # Company in the market portifolio
     for i in range(1, comany_amount+1):
@@ -302,7 +311,8 @@ if update == "y" or update == "Y":
         row = mv_table.mv_table.loc[mv_table.mv_table["Rank"] == i, :]
         this_company = company_stock(int(row.iloc[0]["Stock_id"]), row.iloc[0]["Company_name"], float(row.iloc[0]["Proportion"]))
         market_port_com_list.append(this_company)
-        this_company.crawl_stock_prices()
+        this_company.crawl_yahoo()
+        # this_company.crawl_stock_prices()
     ##    this_company.write_price_to_csv()
         this_company.crawl_fs()
         this_company.compute_return_rate()
