@@ -10,6 +10,8 @@ from io import StringIO
 import matplotlib.pyplot as plotter
 import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
+import tkinter as tk
+import tkinter.font as tkFont
 
 
 def get_str_month(month):
@@ -281,7 +283,7 @@ now_str_date = str(year) + get_str_month(month) + get_str_day(day)
 risk_free_rate = 0.00217  # one year CD rate for Bank of Taiwan
 
 update = input("Do you want to update data? [y/n]: ")
-if update == ("y" or "Y"):
+if update == "y" or update == "Y":
     # Crawling market value table
     mv_table = market_value_table()
     mv_table.crawl_market_value_table()
@@ -313,9 +315,56 @@ if update == ("y" or "Y"):
     market_port.write_risk_premium_to_csv()
 
 
+# Graphic User Interface
+class window(tk.Frame):
+    def __init__(self):
+        tk.Frame.__init__(self)
+        self.grid()
+        self.create_widgets()
+
+    def create_widgets(self):
+        f1 = tkFont.Font(size=12, family="Courier New")
+        self.instrucion_lbl = tk.Label(self, text="Stock ID: ", height=1, width=12, font=f1)
+        self.alpha_lbl = tk.Label(self, text="alpha: ", height=2, width=17, font=f1)
+        self.beta_lbl = tk.Label(self, text="beta : ", height=2, width=17, font=f1)
+        self.regression_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.regression)
+        self.stock_id_txt = tk.Text(self, height=1, width=5, font=f1)
+
+        self.instrucion_lbl.grid(row=0, column=0)
+        self.alpha_lbl.grid(row=1, column=0)
+        self.beta_lbl.grid(row=1, column=2)
+        self.regression_btn.grid(row=0, column=3)
+        self.stock_id_txt.grid(row=0, column=1, columnspan=2, sticky=tk.NE + tk.SW)
+
+    def regression(self):
+        """Run regression to find alpha and beta"""
+        # choose the target stock
+        target_stock_id = int(self.stock_id_txt.get("1.0", tk.END))
+        target_co = company_stock(target_stock_id, "NA", "NA")
+        target_co.crawl_stock_prices()
+        target_co.crawl_fs()
+        target_co.compute_return_rate()
+
+        # run regression
+        with open(file=os.getcwd()+ r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
+            market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
+            market_port_risk_premium_4lm = np.array(market_port_risk_premium).reshape(-1 ,1)
+            target_co_risk_prmium_4lm = np.array(target_co.risk_premium_list).reshape(-1, 1)
+            lm = LinearRegression()
+            lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
+            # print("alpha:   ",  lm.intercept_)
+            # print("beta:    ", lm.coef_)
+            # print("R Square:", lm.score(market_port_risk_premium_4lm, target_co_risk_prmium_4lm))
+
+        self.alpha_lbl.configure(text="alpha: %.6f" % lm.intercept_)
+        self.beta_lbl.configure(text="beta : %.6f" % lm.coef_)
+
+mywindow = window()
+mywindow.master.title("Program")
+mywindow.mainloop()
+
 """
-following: lineal model
-"""
+### Run Regression - Old Version
 
 # Choose the target company
 target_co_info = "2412,中華電".split(",")  # we can let user input this in later version
@@ -325,7 +374,7 @@ target_co.crawl_fs()
 target_co.compute_return_rate()
 
 # Run regression
-with open(file=os.getcwd()+ r"\\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
+with open(file=os.getcwd()+ r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
     market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
     market_port_risk_premium_4lm = np.array(market_port_risk_premium).reshape(-1 ,1)
 target_co_risk_prmium_4lm = np.array(target_co.risk_premium_list).reshape(-1, 1)
@@ -334,12 +383,12 @@ lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
 print("alpha:   ",  lm.intercept_)
 print("beta:    ", lm.coef_)
 print("R Square:", lm.score(market_port_risk_premium_4lm, target_co_risk_prmium_4lm))
+"""
 
 """
 # following: Capital Market Line
 # not complete yet
 """
-
 
 def CML(E_r):
     E_risk_premium = E_r - risk_free_rate
@@ -348,7 +397,7 @@ def CML(E_r):
 
 
 flag = "Y"
-while flag == ("Y" or "y"):
+while flag == "y" or flag == "Y":
     E_r = float(input("Please enter your required daily RoR: "))
     ratio = CML(E_r)
     print("You should put %.4f in risk-free asset, and the rest in market portfolio" % ratio)
