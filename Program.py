@@ -170,7 +170,7 @@ class company_stock():
         self.return_rate_list = []
         for i in range(len(self.price_list)-1):
             rate = 0
-            if str(self.price_dict["Date"][i])[:4] == str(year) or str(self.price_dict["Date"][i])[:4] == str(year-1):
+            if str(self.price_data["Date"][i])[:4] == str(year) or str(self.price_data["Date"][i])[:4] == str(year-1):
                 rate = round((((self.price_list[i+1]-self.price_list[i]+(self.div/this_share/365)) / self.price_list[i+1])), 10)
             else:
                 rate = round((((self.price_list[i]-self.price_list[i+1]+(self.last_div/last_share/365)) / self.price_list[i])), 10)
@@ -195,13 +195,13 @@ class company_stock():
         target_csv.close()
 
     def plot_price(self):
-        self.price_dict["Highest"] = [p for _,p in sorted(zip(self.price_dict["Date"], self.price_dict["Highest"]))]
-        self.price_dict["Lowest"] = [p for _,p in sorted(zip(self.price_dict["Date"], self.price_dict["Lowest"]))]
-        self.price_dict["Date"].sort()
-        datetime_list = [datetime.date(int(str(d)[:4]), int(str(d)[4:6]), int(str(d)[6:])) for d in self.price_dict["Date"]]
+        self.price_data["High"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["High"]))]
+        self.price_data["Low"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["Low"]))]
+        self.price_data = sorted(self.price_data)
+        datetime_list = [datetime.date(int(str(d)[:4]), int(str(d)[4:6]), int(str(d)[6:])) for d in self.price_data["Date"]]
         plotter.figure()
-        plotter.plot(datetime_list, self.price_dict["Highest"], label="Highest", color="red")
-        plotter.plot(datetime_list, self.price_dict["Lowest"], label="Lowest", color="lightgreen")
+        plotter.plot(datetime_list, self.price_data["High"], label="High", color="red")
+        plotter.plot(datetime_list, self.price_data["Lowe"], label="Low", color="lightgreen")
         plotter.title("Stock Index "+str(self.index))
         plotter.legend(loc="upper left")
         plotter.xlabel("Time")
@@ -370,7 +370,7 @@ class window(tk.Frame):
         # choose the target stock
         self.target_stock_id = int(self.stock_id_txt.get("1.0", tk.END))
         self.target_co = company_stock(self.target_stock_id, "NA", "NA")
-        self.target_co.crawl_stock_prices()
+        self.target_co.crawl_yahoo()
         self.target_co.crawl_fs()
         self.target_co.compute_return_rate()
 
