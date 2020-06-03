@@ -283,6 +283,15 @@ class market_portfolio():
                 target_csv.write("," + str(self.risk_premium_list[r]))
         target_csv.close()
 
+    def write_stock_info_in_market_port_to_csv(self):
+        """format: index_1;name1;proportion1,index2;name2;proportion2,..."""
+        now_path = os.getcwd()
+        with open(now_path + r"\Sotck_Info_In_Market_Portfolio.csv", "w", newline="", encoding="UTF-8") as target_csv:
+            for s in range(len(self.market_list)):
+                if s == 0:
+                    target_csv.write(str(self.market_list[s].index) + ";" + str(self.market_list[s].name) + ";" + str(self.market_list[s].proportion))
+                else:
+                    target_csv.write("," + str(self.market_list[s].index) + ";" + str(self.market_list[s].name) + ";" + str(self.market_list[s].proportion))
 
 
 # Main
@@ -302,7 +311,7 @@ if update == "y" or update == "Y":
     mv_table.crawl_market_value_table()
     mv_table.write_mb_table_to_csv()
 
-    comany_amount = 1  # How many company do we want to crawl
+    comany_amount = 3  # How many company do we want to crawl
     # Crawling top companies
     market_port_com_list = []  # Company in the market portifolio
     for i in range(1, comany_amount+1):
@@ -327,6 +336,8 @@ if update == "y" or update == "Y":
     market_port.write_market_port_to_csv()
     ##market_port.plot_SML()
     market_port.write_risk_premium_to_csv()
+    market_port.write_stock_info_in_market_port_to_csv()
+    
 
 
 # Graphic User Interface
@@ -337,6 +348,19 @@ class window(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+        # prepare the info of the stocks in the market portfolio
+        self.mrkt_port_info = "- Market Portfolio (Proportion: Stock ID, Company Name) -\n\n"
+        now_path = os.getcwd()
+        with open(now_path + r"\Sotck_Info_In_Market_Portfolio.csv", "r", encoding="UTF-8") as target_csv:
+            info = target_csv.readline().split(",")
+            info = [i.split(";") for i in info] 
+            total_proportion = 0
+            for s in range(len(info)):
+                info[s][2] = float(info[s][2])
+                total_proportion += info[s][2]
+            for s in range(len(info)):
+                self.mrkt_port_info += "%05.2f%%: %s, %s\n" % ((info[s][2] / total_proportion * 100), info[s][0], info[s][1])
+
         f1 = tkFont.Font(size=12, family="Courier New")
         self.instrucion1_lbl = tk.Label(self, text="Stock ID: ", height=1, width=12, font=f1)
         self.alpha_lbl = tk.Label(self, text="alpha: ", height=2, width=17, font=f1)
@@ -344,6 +368,7 @@ class window(tk.Frame):
         self.regression_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.regression)
         self.stock_id_txt = tk.Text(self, height=1, width=5, font=f1)
         self.draw_price_btn = tk.Button(self, text="Draw!", height=1, width=5, font=f1, command=self.draw_price)
+        self.market_port_info_lbl = tk.Label(self, text=self.mrkt_port_info, font=f1)
 
         self.instrucion1_lbl.grid(row=0, column=0, sticky=tk.E)
         self.alpha_lbl.grid(row=1, column=0)
@@ -351,19 +376,20 @@ class window(tk.Frame):
         self.regression_btn.grid(row=0, column=3)
         self.stock_id_txt.grid(row=0, column=1, columnspan=2, sticky=tk.NE + tk.SW)
         self.draw_price_btn.grid(row=1, column=5)
+        self.market_port_info_lbl.grid(row=2, column=0, columnspan=5, sticky=tk.W)
 
         self.empty_lbl = tk.Label(self, text="")
-        self.empty_lbl.grid(row=2, column=0)
+        self.empty_lbl.grid(row=3, column=0)
 
         self.instrucion2_lbl = tk.Label(self, text="Required daily RoR: ", height=1, width=20, font=f1)
         self.ratio_lbl = tk.Label(self, text="Suggest: ", height=2, font=f1)
         self.complete_port_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.complete_port)
         self.ror_txt = tk.Text(self, height=1, width=5, font=f1)
 
-        self.instrucion2_lbl.grid(row=3, column=0, columnspan=2, sticky=tk.E)
-        self.ratio_lbl.grid(row=4, column=0, columnspan=5, sticky=tk.NW)
-        self.complete_port_btn.grid(row=3, column=4)
-        self.ror_txt.grid(row=3, column=2, columnspan=2, sticky=tk.NE + tk.SW)
+        self.instrucion2_lbl.grid(row=4, column=0, columnspan=2, sticky=tk.E)
+        self.ratio_lbl.grid(row=5, column=0, columnspan=5, sticky=tk.NW)
+        self.complete_port_btn.grid(row=4, column=4)
+        self.ror_txt.grid(row=4, column=2, columnspan=2, sticky=tk.NE + tk.SW)
 
     def regression(self):
         """Run regression to find alpha and beta"""
