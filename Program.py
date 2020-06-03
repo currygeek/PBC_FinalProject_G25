@@ -207,8 +207,8 @@ class company_stock():
         target_csv.close()
 
     def plot_price(self):
-        self.price_data["High"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["High"]))]
-        self.price_data["Low"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["Low"]))]
+        self.price_data["High"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["High"]), reverse = True)]
+        self.price_data["Low"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["Low"]), reverse = True)]
         datetime_list = [datetime.date(int(str(d)[:4]), int(str(d)[4:6]), int(str(d)[6:])) for d in self.price_data["Date"]]
         plotter.figure()
         plotter.plot(datetime_list, self.price_data["High"], label="High", color="red")
@@ -317,8 +317,9 @@ risk_free_rate = 0.00217  # one year CD rate for Bank of Taiwan
 
 '''
 Little test for crawling
-yee = company_stock(2443, "YEE", 0.001)
-yee.crawl_fs()
+tsmc = company_stock(2330, "TSMC", 0.22)
+tsmc.crawl_yahoo()
+tsmc.plot_price()
 '''
 
 update = input("Do you want to update data? [y/n]: ")
