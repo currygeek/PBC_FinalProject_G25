@@ -126,14 +126,11 @@ class company_stock():
         self.price_data.reset_index(inplace = True)
         self.price_data["Date"] = [int(d.strftime("%Y%m%d")) for d in self.price_data["Date"]]
         self.price_data = self.price_data.sort_values(["Date"], ascending = False)
-        # print(self.price_data)
         self.price_list = [round((o+h+l+c)/4, 4) for o, h, l, c in zip(self.price_data["Open"], self.price_data["High"], self.price_data["Low"], self.price_data["Close"])]
         self.price_mean = round(np.mean(self.price_list), 4)
         self.price_std = round(np.std(self.price_list, ddof=1), 4)  # Sample standard deviation
         # print(self.price_mean, self.price_std)
         
-        
-    
     def crawl_fs(self):
         fs_url = "https://mops.twse.com.tw/server-java/t164sb01?step=1"+"&"+"CO_ID="+str(self.index)+"&SYEAR="+str(year-1)+"&SSEASON=4&REPORT_ID=C"
         fs_web = requests.get(fs_url)
@@ -150,15 +147,30 @@ class company_stock():
         # Some basic measurements
         # Basic EPS
         EPS_row = self.statement_of_CI.loc[self.statement_of_CI["Title"] == "基本每股盈餘合計　Total basic earnings per share",:]
-        self.EPS = float(EPS_row.iloc[0][str(year-1)])
-        self.last_EPS = float(EPS_row.iloc[0][str(year-2)])
+        s_EPS = EPS_row.iloc[0][str(year-1)]
+        s_last_EPS = EPS_row.iloc[0][str(year-2)]
+        if s_EPS[0] == "(":
+            self.EPS = 0-float(s_EPS[1:-1])
+        else:
+            self.EPS = float(s_EPS)
+        if s_last_EPS[0] == "(":
+            self.last_EPS = 0-float(s_last_EPS[1:-1])
+        else:
+            self.last_EPS = float(s_last_EPS)
+        # print(self.EPS, self.last_EPS)
         # Dividends
         div_row = self.statement_of_CF.loc[self.statement_of_CF["Title"] == "發放現金股利　Cash dividends paid",:]
-        self.div = str(div_row.iloc[0]["In"+str(year-1)])
-        self.div = int(self.div[1:][:-1].replace(",", ""))
-        self.last_div = str(div_row.iloc[0]["In"+str(year-2)])
-        self.last_div = int(self.last_div[1:][:-1].replace(",", ""))
-        self.div_growth_rate = round(self.div/self.last_div, 4) - 1
+        if div_row.empty:
+            self.div = 0
+            self.last_div = 0
+            self.div_growth_rate = 0
+        else:
+            self.div = str(div_row.iloc[0]["In"+str(year-1)])
+            self.div = int(self.div[1:][:-1].replace(",", ""))
+            self.last_div = str(div_row.iloc[0]["In"+str(year-2)])
+            self.last_div = int(self.last_div[1:][:-1].replace(",", ""))
+            self.div_growth_rate = round(self.div/self.last_div, 4) - 1
+        # print(self.div, self.last_div)
         # Capability of adding more financial statement here
         fs_web.close()
 
@@ -197,11 +209,10 @@ class company_stock():
     def plot_price(self):
         self.price_data["High"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["High"]))]
         self.price_data["Low"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["Low"]))]
-        self.price_data = sorted(self.price_data)
         datetime_list = [datetime.date(int(str(d)[:4]), int(str(d)[4:6]), int(str(d)[6:])) for d in self.price_data["Date"]]
         plotter.figure()
         plotter.plot(datetime_list, self.price_data["High"], label="High", color="red")
-        plotter.plot(datetime_list, self.price_data["Lowe"], label="Low", color="lightgreen")
+        plotter.plot(datetime_list, self.price_data["Low"], label="Low", color="lightgreen")
         plotter.title("Stock Index "+str(self.index))
         plotter.legend(loc="upper left")
         plotter.xlabel("Time")
@@ -303,6 +314,12 @@ month = 5
 day = 29
 now_str_date = str(year) + get_str_month(month) + get_str_day(day)
 risk_free_rate = 0.00217  # one year CD rate for Bank of Taiwan
+
+'''
+Little test for crawling
+yee = company_stock(2443, "YEE", 0.001)
+yee.crawl_fs()
+'''
 
 update = input("Do you want to update data? [y/n]: ")
 if update == "y" or update == "Y":
