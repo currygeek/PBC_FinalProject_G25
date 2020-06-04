@@ -44,6 +44,14 @@ def get_last_month_date(str_date):
     return new_year + new_month + "01"
 
 
+def acct_num_str_to_float(str_num):
+    if "(" in str_num:
+        float_num = -(float(str_num[1:-1]))
+    else:
+        float_num = float(str_num)
+    return float_num
+
+
 class market_value_table():
     def __init__(self):
         pass
@@ -149,14 +157,8 @@ class company_stock():
         EPS_row = self.statement_of_CI.loc[self.statement_of_CI["Title"] == "基本每股盈餘合計　Total basic earnings per share",:]
         s_EPS = EPS_row.iloc[0][str(year-1)]
         s_last_EPS = EPS_row.iloc[0][str(year-2)]
-        if s_EPS[0] == "(":
-            self.EPS = 0-float(s_EPS[1:-1])
-        else:
-            self.EPS = float(s_EPS)
-        if s_last_EPS[0] == "(":
-            self.last_EPS = 0-float(s_last_EPS[1:-1])
-        else:
-            self.last_EPS = float(s_last_EPS)
+        self.EPS = acct_num_str_to_float(s_EPS)
+        self.last_EPS = acct_num_str_to_float(s_last_EPS)
         # print(self.EPS, self.last_EPS)
         # Dividends
         div_row = self.statement_of_CF.loc[self.statement_of_CF["Title"] == "發放現金股利　Cash dividends paid",:]
@@ -177,8 +179,8 @@ class company_stock():
     def compute_return_rate(self):  # Return rate on daily basis (or the annual return rate cannot be computed with our data)
         NI_row = self.statement_of_CI.loc[self.statement_of_CI["Title"] == "本期淨利（淨損）Profit (loss)",:]
         EPS_row = self.statement_of_CI.loc[self.statement_of_CI["Title"] == "基本每股盈餘合計　Total basic earnings per share",:]
-        this_share = int(float(NI_row.iloc[0][str(year-1)].replace(",", ""))*1000 / float(EPS_row.iloc[0][str(year-1)]))   # Outstanding share
-        last_share = int(float(NI_row.iloc[0][str(year-2)].replace(",", ""))*1000 / float(EPS_row.iloc[0][str(year-2)]))
+        this_share = int(acct_num_str_to_float(NI_row.iloc[0][str(year-1)].replace(",", ""))*1000 / acct_num_str_to_float(EPS_row.iloc[0][str(year-1)]))   # Outstanding share
+        last_share = int(acct_num_str_to_float(NI_row.iloc[0][str(year-2)].replace(",", ""))*1000 / acct_num_str_to_float(EPS_row.iloc[0][str(year-2)]))
         self.return_rate_list = []
         for i in range(len(self.price_list)-1):
             rate = 0
