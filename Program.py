@@ -331,7 +331,7 @@ if update == "y" or update == "Y":
     mv_table.crawl_market_value_table()
     mv_table.write_mb_table_to_csv()
 
-    comany_amount = 3  # How many company do we want to crawl
+    comany_amount = 2  # How many company do we want to crawl
     # Crawling top companies
     market_port_com_list = []  # Company in the market portifolio
     for i in range(1, comany_amount+1):
@@ -383,20 +383,22 @@ class window(tk.Frame):
 
         f1 = tkFont.Font(size=12, family="Courier New")
         self.instrucion1_lbl = tk.Label(self, text="Stock ID: ", height=1, width=12, font=f1)
-        self.alpha_lbl = tk.Label(self, text="alpha: ", height=2, width=17, font=f1)
-        self.beta_lbl = tk.Label(self, text="beta : ", height=2, width=17, font=f1)
+        self.alpha_lbl = tk.Label(self, text="α: ", height=2, width=17, font=f1)
+        self.beta_lbl = tk.Label(self, text="β: ", height=2, width=17, font=f1)
+        self.stddev_residual_lbl = tk.Label(self, text="σ(e): ", height=2, width=17, font=f1)
         self.regression_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.regression)
         self.stock_id_txt = tk.Text(self, height=1, width=5, font=f1)
         self.draw_price_btn = tk.Button(self, text="Draw!", height=1, width=5, font=f1, command=self.draw_price)
         self.market_port_info_lbl = tk.Label(self, text=self.mrkt_port_info, font=f1)
 
         self.instrucion1_lbl.grid(row=0, column=0, sticky=tk.E)
-        self.alpha_lbl.grid(row=1, column=0)
-        self.beta_lbl.grid(row=1, column=2)
-        self.regression_btn.grid(row=0, column=3)
-        self.stock_id_txt.grid(row=0, column=1, columnspan=2, sticky=tk.NE + tk.SW)
-        self.draw_price_btn.grid(row=1, column=5)
-        self.market_port_info_lbl.grid(row=2, column=0, columnspan=5, sticky=tk.W)
+        self.alpha_lbl.grid(row=1, column=0, sticky=tk.W)
+        self.beta_lbl.grid(row=1, column=2, sticky=tk.W)
+        self.stddev_residual_lbl.grid(row=1, column=4, sticky=tk.W)
+        self.regression_btn.grid(row=0, column=4)
+        self.stock_id_txt.grid(row=0, column=2, columnspan=2, sticky=tk.NE + tk.SW)
+        self.draw_price_btn.grid(row=1, column=6)
+        self.market_port_info_lbl.grid(row=2, column=0, columnspan=6, sticky=tk.W)
 
         self.empty_lbl = tk.Label(self, text="")
         self.empty_lbl.grid(row=3, column=0)
@@ -407,7 +409,7 @@ class window(tk.Frame):
         self.ror_txt = tk.Text(self, height=1, width=5, font=f1)
 
         self.instrucion2_lbl.grid(row=4, column=0, columnspan=2, sticky=tk.E)
-        self.ratio_lbl.grid(row=5, column=0, columnspan=5, sticky=tk.NW)
+        self.ratio_lbl.grid(row=5, column=0, columnspan=6, sticky=tk.NW)
         self.complete_port_btn.grid(row=4, column=4)
         self.ror_txt.grid(row=4, column=2, columnspan=2, sticky=tk.NE + tk.SW)
 
@@ -427,9 +429,12 @@ class window(tk.Frame):
         target_co_risk_prmium_4lm = np.array(self.target_co.risk_premium_list).reshape(-1, 1)
         lm = LinearRegression()
         lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
+        self.stddev_residual = np.var(target_co_risk_prmium_4lm - lm.predict(market_port_risk_premium_4lm), ddof=1) ** 0.5
 
-        self.alpha_lbl.configure(text="alpha: %.6f" % lm.intercept_)
-        self.beta_lbl.configure(text="beta : %.6f" % lm.coef_)
+        self.alpha_lbl.configure(text="α: %.6f" % lm.intercept_)
+        self.beta_lbl.configure(text="β: %.6f" % lm.coef_)
+        self.stddev_residual_lbl.configure(text="σ(e): %.6f" % self.stddev_residual)
+
 
     def draw_price(self):
         """Please execute the function "regression()" fist"""
