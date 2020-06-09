@@ -14,7 +14,7 @@ from sklearn.linear_model import LinearRegression
 import tkinter as tk
 import tkinter.font as tkFont
 
-
+# Processing date
 def get_str_month(month):
     if not month in [10, 11, 12]:
         return "0" + str(month)
@@ -51,8 +51,12 @@ def acct_num_str_to_float(str_num):
         float_num = float(str_num)
     return float_num
 
-
+# The market value proportion of all companies
 class market_value_table():
+    '''
+    Member variables:
+        mv_table: The market value table in dataframe type, including rank, id, name and proportion
+    '''
     def __init__(self):
         pass
 
@@ -86,6 +90,29 @@ class market_value_table():
 
 # Price_data: dataframe for price, Price_list: list for price
 class company_stock():
+    '''
+    Member variables:
+        int index
+        str name
+        float prop: the prportion of the value in the market
+        str stock_path: where to write the data
+        dict price_dict: prepare for dataframe
+        dataframe price_data: including Date, Open, High, Low, Close, Volume of each transaction date
+        list price_list: store all price we've crawled
+        float price_mean: mean of price_list
+        foat price_std: sample standard deviation of price_list
+        dataframe bs_sheet: balance sheet (or Bull Shit)
+        dataframe statement_of_CI: statement of comprehensive income
+        dataframe statement_of_CF: statement of cash flows
+        float EPS: nearest EPS
+        float last_EPS: second nearest EPS
+        int div: nearest total dividends
+        int last_div: second nearest dividends
+        float div_growth_rate: growth rate of dividends
+        list return_rate_list: return rate of each day
+        list risk_premim_list: risk premium of each day
+        float risk_premium_mean, float risk_premium_var
+    '''
     def __init__(self, index, name, prop):  # wait for stock price input
         self.index = index
         self.name = name
@@ -95,6 +122,7 @@ class company_stock():
             os.mkdir(self.stock_path)
     
     def crawl_a_month_price(self, str_date):
+        print("Crawling")
         price_url = "https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date="+str_date+"&stockNo="+str(self.index)
         price_web = requests.get(price_url)
         print("check")
@@ -128,6 +156,7 @@ class company_stock():
         self.price_std = round(np.std(self.price_list, ddof=1), 4)  # Sample standard deviation
 
     def crawl_yahoo(self):
+        print("Crawling")
         stock = yf.Ticker(str(self.index)+".TW")
         self.price_data = stock.history("2y")
         self.price_data.drop(columns = ["Dividends", "Stock Splits"])
@@ -212,7 +241,7 @@ class company_stock():
         self.price_data["High"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["High"]), reverse = True)]
         self.price_data["Low"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["Low"]), reverse = True)]
         datetime_list = [datetime.date(int(str(d)[:4]), int(str(d)[4:6]), int(str(d)[6:])) for d in self.price_data["Date"]]
-        plotter.figure()
+        plotter.Figure()
         plotter.plot(datetime_list, self.price_data["High"], label="High", color="red")
         plotter.plot(datetime_list, self.price_data["Low"], label="Low", color="lightgreen")
         plotter.title("Stock Index "+str(self.index))
@@ -225,6 +254,13 @@ class company_stock():
 
 
 class market_portfolio():
+    '''
+    Member variables:
+        int stock_amount: how many companies are there in our market portfolio
+        list market_list: companies in our market portfolio
+        list price_list, list return_rate_list, list risk_premium_list(mean, var) >> same as company_stock
+        dataframe market_price_data
+    '''
     def __init__(self, num,  market_list):
         self.stock_amount = num
         self.market_list = market_list
@@ -317,13 +353,6 @@ day = 29
 now_str_date = str(year) + get_str_month(month) + get_str_day(day)
 risk_free_rate = 0.00217  # one year CD rate for Bank of Taiwan
 
-'''
-Little test for crawling
-tsmc = company_stock(2330, "TSMC", 0.22)
-tsmc.crawl_yahoo()
-tsmc.plot_price()
-'''
-
 update = input("Do you want to update data? [y/n]: ")
 if update == "y" or update == "Y":
     # Crawling market value table
@@ -331,7 +360,7 @@ if update == "y" or update == "Y":
     mv_table.crawl_market_value_table()
     mv_table.write_mb_table_to_csv()
 
-    comany_amount = 2  # How many company do we want to crawl
+    comany_amount = 20  # How many company do we want to crawl
     # Crawling top companies
     market_port_com_list = []  # Company in the market portifolio
     for i in range(1, comany_amount+1):
@@ -412,6 +441,8 @@ class window(tk.Frame):
         self.ratio_lbl.grid(row=5, column=0, columnspan=6, sticky=tk.NW)
         self.complete_port_btn.grid(row=4, column=4)
         self.ror_txt.grid(row=4, column=2, columnspan=2, sticky=tk.NE + tk.SW)
+        
+        
 
     def regression(self):
         """Run regression to find alpha and beta"""
@@ -437,8 +468,9 @@ class window(tk.Frame):
 
 
     def draw_price(self):
-        """Please execute the function "regression()" fist"""
-        self.target_co.plot_price()
+        """Please execute the function "regression()" first"""
+        self.target_co.plot_price(self.fig)
+        
 
     def complete_port(self):
         """
