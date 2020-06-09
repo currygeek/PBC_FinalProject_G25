@@ -13,6 +13,7 @@ import matplotlib.pyplot as plotter
 from sklearn.linear_model import LinearRegression
 import tkinter as tk
 import tkinter.font as tkFont
+import statistics as st
 
 
 def get_str_month(month):
@@ -50,6 +51,11 @@ def acct_num_str_to_float(str_num):
     else:
         float_num = float(str_num)
     return float_num
+
+
+def annualize_daily_rate_of_return(daily_RoR_list):
+    annual_RoR_list = [(1+i)**365 - 1 for i in daily_RoR_list]
+    return annual_RoR_list
 
 
 class market_value_table():
@@ -189,7 +195,7 @@ class company_stock():
             else:
                 rate = round((((self.price_list[i]-self.price_list[i+1]+(self.last_div/last_share/365)) / self.price_list[i])), 10)
             self.return_rate_list.append(rate)
-        self.risk_premium_list = [r-risk_free_rate for r in self.return_rate_list]
+        self.risk_premium_list = [r-daily_rf_rate for r in self.return_rate_list]
         self.risk_premium_mean = round(np.mean(self.risk_premium_list), 10)
         self.risk_premium_var = round(np.var(self.risk_premium_list, ddof=1), 10)
 
@@ -253,7 +259,7 @@ class market_portfolio():
         price_dict["Daily_Return"] = self.return_rate_list
         self.market_price_data = pd.DataFrame(price_dict)
         self.return_rate_list = self.return_rate_list[:-1]
-        self.risk_premium_list = [r-risk_free_rate for r in self.return_rate_list]
+        self.risk_premium_list = [r-daily_rf_rate for r in self.return_rate_list]
         self.risk_premium_mean = np.mean(self.risk_premium_list)
         self.risk_premium_var = np.var(self.risk_premium_list, ddof=1)
 
@@ -269,9 +275,9 @@ class market_portfolio():
     
     def plot_SML(self):
         beta_list = [stock.beta_m for stock in self.market_list]
-        return_list = [stock.risk_premium_mean + risk_free_rate for stock in self.market_list]
+        return_list = [stock.risk_premium_mean + daily_rf_rate for stock in self.market_list]
         x = range(int(beta_list[0]), int(beta_list[len(beta_list)-1])+2)
-        y = [self.risk_premium_mean*b + risk_free_rate for b in x]
+        y = [self.risk_premium_mean*b + daily_rf_rate for b in x]
         plotter.figure()
         plotter.plot(beta_list, return_list, "k.", color="olive")
         plotter.plot(x, y, color="orange")
@@ -315,8 +321,11 @@ year = 2020  # The market hasn't open in June!!
 month = 5
 day = 29
 now_str_date = str(year) + get_str_month(month) + get_str_day(day)
-risk_free_rate = 0.00217  # one year CD rate for Bank of Taiwan
+risk_free_rate = 0.00815  # one year time deposit rate for Bank of Taiwan
+# SMB = -0.00947  # Last 12 months data from Kenneth R.French - Data Library
+# HML = -0.2943
 
+daily_rf_rate = (1 + risk_free_rate) ** (1/365) - 1
 '''
 Little test for crawling
 tsmc = company_stock(2330, "TSMC", 0.22)
@@ -365,9 +374,10 @@ class window(tk.Frame):
     def __init__(self):
         tk.Frame.__init__(self)
         self.grid()
+        self.prepare_market_data()
         self.create_widgets()
 
-    def create_widgets(self):
+    def prepare_market_data(self):
         # prepare the info of the stocks in the market portfolio
         self.mrkt_port_info = "- Market Portfolio (Proportion: Stock ID, Company Name) -\n\n"
         now_path = os.getcwd()
@@ -381,51 +391,68 @@ class window(tk.Frame):
             for s in range(len(info)):
                 self.mrkt_port_info += "%05.2f%%: %s, %s\n" % ((info[s][2] / total_proportion * 100), info[s][0], info[s][1])
 
+        # prepare rate of return of the market portfolio for regression
+        with open(file=os.getcwd() + r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
+            self.market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
+        self.annual_market_port_risk_premium = annualize_daily_rate_of_return(self.market_port_risk_premium)
+        self.annual_market_port_risk_premium_gmean = st.geometric_mean([(1+i) for i in self.annual_market_port_risk_premium]) - 1
+
+    def create_widgets(self):
         f1 = tkFont.Font(size=12, family="Courier New")
         self.instrucion1_lbl = tk.Label(self, text="Stock ID: ", height=1, width=12, font=f1)
+        self.regression_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.regression)
+        self.stock_id_txt = tk.Text(self, height=1, width=5, font=f1)
+        self.stock_name_lbl = tk.Label(self, text="Stock Name: ", height = 1, width=20, font=f1)
+        self.draw_price_btn = tk.Button(self, text="Draw Stock Price", height=1, width=18, font=f1, command=self.draw_price)
         self.alpha_lbl = tk.Label(self, text="α: ", height=2, width=17, font=f1)
         self.beta_lbl = tk.Label(self, text="β: ", height=2, width=17, font=f1)
         self.stddev_residual_lbl = tk.Label(self, text="σ(e): ", height=2, width=17, font=f1)
-        self.regression_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.regression)
-        self.stock_id_txt = tk.Text(self, height=1, width=5, font=f1)
-        self.draw_price_btn = tk.Button(self, text="Draw!", height=1, width=5, font=f1, command=self.draw_price)
-        self.market_port_info_lbl = tk.Label(self, text=self.mrkt_port_info, font=f1)
 
         self.instrucion1_lbl.grid(row=0, column=0, sticky=tk.E)
-        self.alpha_lbl.grid(row=1, column=0, sticky=tk.W)
-        self.beta_lbl.grid(row=1, column=2, sticky=tk.W)
-        self.stddev_residual_lbl.grid(row=1, column=4, sticky=tk.W)
         self.regression_btn.grid(row=0, column=4)
         self.stock_id_txt.grid(row=0, column=2, columnspan=2, sticky=tk.NE + tk.SW)
-        self.draw_price_btn.grid(row=1, column=6)
-        self.market_port_info_lbl.grid(row=2, column=0, columnspan=6, sticky=tk.W)
+        self.stock_name_lbl.grid(row=1, column=0, columnspan=4)
+        self.draw_price_btn.grid(row=1, column=4)
+        self.alpha_lbl.grid(row=2, column=0, sticky=tk.W)
+        self.beta_lbl.grid(row=2, column=2, sticky=tk.W)
+        self.stddev_residual_lbl.grid(row=2, column=4, sticky=tk.W)
 
-        self.empty_lbl = tk.Label(self, text="")
-        self.empty_lbl.grid(row=3, column=0)
+        self.empty_lbl_1 = tk.Label(self, text="")
+        self.empty_lbl_1.grid(row=3, column=0)
 
-        self.instrucion2_lbl = tk.Label(self, text="Required daily RoR: ", height=1, width=20, font=f1)
-        self.ratio_lbl = tk.Label(self, text="Suggest: ", height=2, font=f1)
+        self.market_port_info_lbl = tk.Label(self, text=self.mrkt_port_info, font=f1)
+        self.market_port_info_lbl.grid(row=4, column=0, columnspan=6, sticky=tk.W)
+
+        self.empty_lbl_2 = tk.Label(self, text="")
+        self.empty_lbl_2.grid(row=5, column=0)
+
+        self.instrucion2_lbl = tk.Label(self, text="Required annualized RoR: ", height=1, width=25, font=f1)
         self.complete_port_btn = tk.Button(self, text="Enter", height=1, width=5, font=f1, command=self.complete_port)
         self.ror_txt = tk.Text(self, height=1, width=5, font=f1)
+        self.ratio_lbl = tk.Label(self, text="Suggest: ", height=2, font=f1)
 
-        self.instrucion2_lbl.grid(row=4, column=0, columnspan=2, sticky=tk.E)
-        self.ratio_lbl.grid(row=5, column=0, columnspan=6, sticky=tk.NW)
-        self.complete_port_btn.grid(row=4, column=4)
-        self.ror_txt.grid(row=4, column=2, columnspan=2, sticky=tk.NE + tk.SW)
+        self.instrucion2_lbl.grid(row=6, column=0, columnspan=2, sticky=tk.E)
+        self.complete_port_btn.grid(row=6, column=4)
+        self.ror_txt.grid(row=6, column=2, columnspan=2, sticky=tk.NE + tk.SW)
+        self.ratio_lbl.grid(row=7, column=0, columnspan=6, sticky=tk.NW)
 
     def regression(self):
         """Run regression to find alpha and beta"""
         # choose the target stock
         self.target_stock_id = int(self.stock_id_txt.get("1.0", tk.END))
-        self.target_co = company_stock(self.target_stock_id, "NA", "NA")
+        now_path = os.getcwd()  # find the selected stock's name
+        with open(file=now_path + r"\Market_Value_Table.csv", mode="r", encoding="utf-8") as fh:
+            data = pd.read_csv(fh)
+            for i in range(len(data["Stock_id"])):
+                if data["Stock_id"][i] == self.target_stock_id:
+                    self.target_co_name = data["Company_name"][i]
+        self.target_co = company_stock(self.target_stock_id, self.target_co_name, "NA")
         self.target_co.crawl_yahoo()
         self.target_co.crawl_fs()
         self.target_co.compute_return_rate()
 
-        # run regression
-        with open(file=os.getcwd() + r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
-            market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
-        market_port_risk_premium_4lm = np.array(market_port_risk_premium).reshape(-1, 1)
+        # run regression: Capital Asset Pricing Model
+        market_port_risk_premium_4lm = np.array(self.market_port_risk_premium).reshape(-1, 1)
         target_co_risk_prmium_4lm = np.array(self.target_co.risk_premium_list).reshape(-1, 1)
         lm = LinearRegression()
         lm.fit(market_port_risk_premium_4lm, target_co_risk_prmium_4lm)
@@ -434,7 +461,7 @@ class window(tk.Frame):
         self.alpha_lbl.configure(text="α: %.6f" % lm.intercept_)
         self.beta_lbl.configure(text="β: %.6f" % lm.coef_)
         self.stddev_residual_lbl.configure(text="σ(e): %.6f" % self.stddev_residual)
-
+        self.stock_name_lbl.configure(text="Stock Name: %s" % self.target_co_name)
 
     def draw_price(self):
         """Please execute the function "regression()" fist"""
@@ -447,9 +474,7 @@ class window(tk.Frame):
         """
         target_RoR = float(self.ror_txt.get("1.0", tk.END))
         target_rist_premium = target_RoR - risk_free_rate
-        with open(file=os.getcwd() + r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
-            market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
-        rf_asset_ratio = 1 - (target_rist_premium / np.mean(market_port_risk_premium))
+        rf_asset_ratio = 1 - (target_rist_premium / self.annual_market_port_risk_premium_gmean)
         self.ratio_lbl.configure(text="Suggest: You should put %.4f in risk-free asset,\nand the rest in market portfolio" % rf_asset_ratio)
 
 
