@@ -259,6 +259,7 @@ class company_stock():
         plotter.xticks(rotation = 80)
         plotter.ylabel("Price")
         plotter.savefig(now_path + r"\price.png")
+        plotter.clf()
         # plotter.show()
         # plotter.close()
 
@@ -509,9 +510,12 @@ class window(tk.Frame):
     def draw_price(self):
         """Please execute the function "regression()" first"""
         now_path = os.getcwd()
+        file_name = now_path + r"\price.png"
         self.target_co.plot_price()
-        self.price_image = ImageTk.PhotoImage(file=now_path + r"\price.png")
+        self.price_image = ImageTk.PhotoImage(file=file_name)
         self.price_cvs.create_image(320, 240, image=self.price_image , anchor=tk.CENTER)
+        os.remove(file_name)
+
 
     def complete_port(self):
         """
