@@ -14,6 +14,7 @@ from sklearn.linear_model import LinearRegression
 import tkinter as tk
 import tkinter.font as tkFont
 import statistics as st
+from PIL import ImageTk
 
 # Processing date
 def get_str_month(month):
@@ -245,6 +246,7 @@ class company_stock():
         target_csv.close()
 
     def plot_price(self):
+        now_path = os.getcwd()
         self.price_data["High"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["High"]), reverse = True)]
         self.price_data["Low"] = [p for _,p in sorted(zip(self.price_data["Date"], self.price_data["Low"]), reverse = True)]
         datetime_list = [datetime.date(int(str(d)[:4]), int(str(d)[4:6]), int(str(d)[6:])) for d in self.price_data["Date"]]
@@ -256,8 +258,9 @@ class company_stock():
         plotter.xlabel("Time")
         plotter.xticks(rotation = 80)
         plotter.ylabel("Price")
-        plotter.show()
-        plotter.close()
+        plotter.savefig(now_path + r"\price.png")
+        # plotter.show()
+        # plotter.close()
 
 
 class market_portfolio():
@@ -377,7 +380,7 @@ if update == "y" or update == "Y":
     mv_table.crawl_market_value_table()
     mv_table.write_mb_table_to_csv()
 
-    comany_amount = 20  # How many company do we want to crawl
+    comany_amount = 5  # How many company do we want to crawl
     # Crawling top companies
     market_port_com_list = []  # Company in the market portifolio
     for i in range(1, comany_amount+1):
@@ -473,6 +476,9 @@ class window(tk.Frame):
         self.ror_txt.grid(row=6, column=2, columnspan=2, sticky=tk.NE + tk.SW)
         self.ratio_lbl.grid(row=7, column=0, columnspan=6, sticky=tk.NW)
 
+        self.price_cvs = tk.Canvas (self, width = 800, height = 600, bg = "white")
+        self.price_cvs.grid(row = 8, column = 0, columnspan = 3, sticky = tk.NE + tk.SW)
+
     def regression(self):
         """Run regression to find alpha and beta"""
         # choose the target stock
@@ -502,8 +508,10 @@ class window(tk.Frame):
 
     def draw_price(self):
         """Please execute the function "regression()" first"""
-        self.target_co.plot_price(self.fig)
-        
+        now_path = os.getcwd()
+        self.target_co.plot_price()
+        self.price_image = ImageTk.PhotoImage(file=now_path + r"\price.png")
+        self.price_cvs.create_image(400, 300, image=self.price_image , anchor=tk.CENTER)
 
     def complete_port(self):
         """
