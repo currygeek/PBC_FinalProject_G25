@@ -476,8 +476,8 @@ class window(tk.Frame):
         self.ror_txt.grid(row=6, column=2, columnspan=2, sticky=tk.NE + tk.SW)
         self.ratio_lbl.grid(row=7, column=0, columnspan=6, sticky=tk.NW)
 
-        self.price_cvs = tk.Canvas (self, width = 800, height = 600, bg = "white")
-        self.price_cvs.grid(row = 8, column = 0, columnspan = 3, sticky = tk.NE + tk.SW)
+        self.price_cvs = tk.Canvas (self, width = 640, height = 480, bg = "white")
+        self.price_cvs.grid(row = 0, column = 6, rowspan = 9, sticky = tk.NE + tk.SW)
 
     def regression(self):
         """Run regression to find alpha and beta"""
@@ -511,7 +511,7 @@ class window(tk.Frame):
         now_path = os.getcwd()
         self.target_co.plot_price()
         self.price_image = ImageTk.PhotoImage(file=now_path + r"\price.png")
-        self.price_cvs.create_image(400, 300, image=self.price_image , anchor=tk.CENTER)
+        self.price_cvs.create_image(320, 240, image=self.price_image , anchor=tk.CENTER)
 
     def complete_port(self):
         """
