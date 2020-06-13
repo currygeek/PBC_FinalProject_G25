@@ -536,8 +536,9 @@ class window(tk.Frame):
         """
         target_RoR = float(self.ror_txt.get("1.0", tk.END))
         target_rist_premium = target_RoR - risk_free_rate
-        rf_asset_ratio = 1 - (target_rist_premium / self.annual_RoR_market)
-        self.ratio_lbl.configure(text="Suggest: You should put %.4f in risk-free asset,\nand the rest in market portfolio" % rf_asset_ratio)
+        rf_asset_ratio = 1 - (target_rist_premium / (self.annual_RoR_market - risk_free_rate))
+        mk_asset_ratio = 1 - rf_asset_ratio
+        self.ratio_lbl.configure(text="Suggest: You should put %.4f in risk-free asset,\nand %.4f in market portfolio" % (rf_asset_ratio, mk_asset_ratio))
 
 
 mywindow = window()
