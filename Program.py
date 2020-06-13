@@ -13,7 +13,6 @@ import matplotlib.pyplot as plotter
 from sklearn.linear_model import LinearRegression
 import tkinter as tk
 import tkinter.font as tkFont
-import statistics as st
 from PIL import ImageTk
 
 # Processing date
@@ -381,7 +380,7 @@ if update == "y" or update == "Y":
     mv_table.crawl_market_value_table()
     mv_table.write_mb_table_to_csv()
 
-    comany_amount = 5  # How many company do we want to crawl
+    comany_amount = 10  # How many company do we want to crawl
     # Crawling top companies
     market_port_com_list = []  # Company in the market portifolio
     for i in range(1, comany_amount+1):
@@ -433,10 +432,16 @@ class window(tk.Frame):
                 self.mrkt_port_info += "%05.2f%%: %s, %s\n" % ((info[s][2] / total_proportion * 100), info[s][0], info[s][1])
 
         # prepare rate of return of the market portfolio for regression
-        with open(file=os.getcwd() + r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
+        with open(file=now_path + r"\Market_Portfolio_Risk_Premium.csv", mode="r", encoding="UTF-8") as fh:
             self.market_port_risk_premium = [float(i) for i in fh.readline().strip().split(",")]
         self.annual_market_port_risk_premium = annualize_daily_rate_of_return(self.market_port_risk_premium)
-        self.annual_market_port_risk_premium_gmean = st.geometric_mean([(1+i) for i in self.annual_market_port_risk_premium]) - 1
+
+        # compute annual RoR of market portfolio throughout our data
+        with open(file=now_path + r"\Market_Portfolio.csv", mode="r", encoding="utf-8") as fh:
+            info = pd.read_csv(fh)
+            price_after = info["Price"][0]
+            price_before = info["Price"][486]
+            self.annual_RoR_market = (price_after/price_before)**0.5 - 1
 
     def create_widgets(self):
         f1 = tkFont.Font(size=12, family="Courier New")
@@ -495,6 +500,13 @@ class window(tk.Frame):
         self.target_co.crawl_fs()
         self.target_co.compute_return_rate()
 
+        while len(self.market_port_risk_premium) != len(self.target_co.risk_premium_list):
+            print(len(self.market_port_risk_premium), len(self.target_co.risk_premium_list))
+            if len(self.market_port_risk_premium) > len(self.target_co.risk_premium_list):
+                self.market_port_risk_premium = self.market_port_risk_premium[:-1]
+            if len(self.market_port_risk_premium) < len(self.target_co.risk_premium_list):
+                self.target_co.risk_premium_list = self.target_co.risk_premium_list[-1]
+
         # run regression: Capital Asset Pricing Model
         market_port_risk_premium_4lm = np.array(self.market_port_risk_premium).reshape(-1, 1)
         target_co_risk_prmium_4lm = np.array(self.target_co.risk_premium_list).reshape(-1, 1)
@@ -524,7 +536,7 @@ class window(tk.Frame):
         """
         target_RoR = float(self.ror_txt.get("1.0", tk.END))
         target_rist_premium = target_RoR - risk_free_rate
-        rf_asset_ratio = 1 - (target_rist_premium / self.annual_market_port_risk_premium_gmean)
+        rf_asset_ratio = 1 - (target_rist_premium / self.annual_RoR_market)
         self.ratio_lbl.configure(text="Suggest: You should put %.4f in risk-free asset,\nand the rest in market portfolio" % rf_asset_ratio)
 
 
