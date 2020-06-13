@@ -439,9 +439,15 @@ class window(tk.Frame):
         # compute annual RoR of market portfolio throughout our data
         with open(file=now_path + r"\Market_Portfolio.csv", mode="r", encoding="utf-8") as fh:
             info = pd.read_csv(fh)
+            last_index = len(info) - 1
+            price_before = info["Price"][last_index]
             price_after = info["Price"][0]
-            price_before = info["Price"][486]
-            self.annual_RoR_market = (price_after/price_before)**0.5 - 1
+            date_before = datetime.datetime.strptime(str(info["Date"][last_index]), "%Y%m%d")
+            date_after = datetime.datetime.strptime(str(info["Date"][0]), "%Y%m%d")
+            days_diff = date_after - date_before
+            days_diff = days_diff.days
+
+            self.annual_RoR_market = (price_after/price_before)**(365/days_diff) - 1
 
     def create_widgets(self):
         f1 = tkFont.Font(size=12, family="Courier New")
